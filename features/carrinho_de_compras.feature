@@ -23,3 +23,9 @@ Feature: Carrinho de Compras
         And Eu clico no botões "+" ou "-"
         And Eu clico no botão "Atualizar"
         Then A quantidade do item "Pizza Grande" é Atualizada no carrinho
+        
+    Scenario: Limpar Carrinho
+        Given Estou na pagina do carrinho
+        When Eu clico no botão "Limpar"
+        Then Todos os items são removidos do carrinho
+        And A mensagem "Seu carrinho está vazio" aparece na tela
