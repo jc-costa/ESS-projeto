@@ -15,3 +15,11 @@ Feature: Carrinho de Compras
         When Eu clico no item "Pizza Grande"
         And Eu clico no botão "Remover"
         Then O item "Pizza Grande" é removido ao carrinho
+
+    Scenario: Modificar item
+        Given Estou na pagina do carrinho
+        And o item "Pizza Grande" está no carrinho 
+        When Eu clico no item "Pizza Grande"
+        And Eu clico no botões "+" ou "-"
+        And Eu clico no botão "Atualizar"
+        Then A quantidade do item "Pizza Grande" é Atualizada no carrinho
