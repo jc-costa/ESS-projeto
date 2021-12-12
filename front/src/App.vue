@@ -8,15 +8,15 @@
       <span>Nome App</span>
       <v-spacer></v-spacer>
       <span>Nome Usuario</span>
-      <v-btn icon class="ml-3">
+      <v-btn icon class="ml-3" @click="goToView('Carrinho')">
         <v-icon>mdi-cart</v-icon>
       </v-btn>
-      <v-btn icon class="ml-3">
+      <v-btn icon class="ml-3" @click="goToView('Pedidos')">
         <v-icon>mdi-clipboard-text</v-icon>
       </v-btn>
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn v-on="on" v-bind="attrs" icon class="ml-3">
+          <v-btn v-on="on" v-bind="attrs" icon class="ml-3 mr-1">
             <v-icon>mdi-dots-vertical</v-icon>
           </v-btn>
         </template>
@@ -40,6 +40,17 @@ export default {
 
   data: () => ({
     //
-  })
+  }),
+  methods: {
+    goToView (page) {
+      switch (page) {
+        case 'Carrinho':
+          this.$router.push('/carrinho')
+          break
+        case 'Pedidos':
+          this.$router.push('/pedidos')
+      }
+    }
+  }
 }
 </script>
