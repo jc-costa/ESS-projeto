@@ -1,8 +1,8 @@
 @i9n
 Feature: Cálculo do tempo estimado de entrega
-   As a cliente
-   I want to ter uma estimativa de quanto tempo irá levar para o meu pedido ser entegue
-   so that Eu posso consultar o tempo de um pedido
+   Como um cliente
+   Eu quero ter uma estimativa de quanto tempo irá levar para o meu pedido ser entegue
+   Para que eu possa consultar o tempo de um pedido
 
    Scenario: Consultar tempo de um pedido
       Given Estou na página de "Pedidos"
