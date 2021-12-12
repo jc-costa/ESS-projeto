@@ -1,8 +1,9 @@
 @i9n
 Feature: Cancelamento de pedidos
-    Como um cliente
-    Eu quero ter uma área na qual eu possa cancelar meu pedido, caso não tenha chegado
-
+    As a Como um cliente
+    I want uma área na qual eu possa cancelar meu pedido, caso não tenha chegado
+    so that Eu posso cancelar meu pedido
+    
     Scenario: Cancelar pedido
         Given Estou na página com meus pedidos realizados
         And o pedido "Pizza Grande" ainda não está em preparação
