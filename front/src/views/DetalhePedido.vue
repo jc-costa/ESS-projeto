@@ -7,9 +7,14 @@
             Pedido #{{this.$route.params.id}}
           </v-card-title>
           <v-card-text>
-            <span>Items</span>
+            Data: #
+            <br>
+            Nome Restaurante: #
+            <br>
+            <span>Item(s)</span>
             <br>
             <span>{{this.informacao}}</span>
+            <span>Valor:</span>
           </v-card-text>
         </v-card>
       </v-col>
@@ -20,9 +25,12 @@
 <script>
 export default {
   data () {
-    return {
+    return [{
       informacao: 'Informação do pedido'
-    }
+    },
+    {
+
+    }]
   }
 }
 </script>
