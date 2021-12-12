@@ -1,8 +1,8 @@
 @i9n
 Feature: Carrinho de Compras
-    As a cliente
-    I want to ter um carrinho de compras ao qual eu possa adicionar, remover, e modificar itens
-    so that eu possa montar o meu pedido antes de realizá-lo
+    Como um cliente
+    Eu quero ter um carrinho de compras ao qual eu possa adicionar, remover, e modificar itens
+    Para que eu possa montar o meu pedido antes de realizá-lo
 
     Scenario: Adicionar item
         Given Estou na pagina do item que desejo pedir
