@@ -11,9 +11,9 @@
           </v-card-title>
           <v-card-text>
             <div class="pl-10">
-              Data: #
+              Data: {{this.date}}
               <br>
-              Nome Restaurante: #
+              Nome Restaurante: {{this.nomeRestaurante}}
               <br>
               <p class ="ml-6">Item(s):</p>
               <!-- o v-for irá gerar essas tags de dentro do span, a quantidade de vezes q tem em informação. key  -->
@@ -22,7 +22,7 @@
               <br>
               </span>
               <br>
-              <span class="">Valor R$:</span>
+              <span class="">Valor R$: {{this.valor}}</span>
             </div>
           </v-card-text>
         </v-card>
@@ -37,7 +37,10 @@ export default {
   data () {
     return {
       pedidos: this.$store.state.pedidos,
-      id: this.$route.params.id
+      id: this.$route.params.id,
+      date: ' ',
+      nomeRestaurante: ' ',
+      valor: ' '
     }
   },
   computed: {
@@ -47,6 +50,9 @@ export default {
         pedido.infoPedidos.forEach(info => {
           if (this.id === info.id) {
             informacao.push(info)
+            this.date = pedido.dataPedido
+            this.nomeRestaurante = info.nomeRestaurante
+            this.valor = info.valor
           }
         })
       })
