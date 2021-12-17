@@ -22,7 +22,7 @@ export class Carrinho {
 
     atualizarItem(item: ItemCarrinho) {
         if (item.quantidade === 0) { // Zerar o item é o mesmo que remover
-            this.removerItem(item);
+            this.removerItem(item.id);
             return;
         }
 
@@ -32,8 +32,8 @@ export class Carrinho {
         }
     }
 
-    removerItem(item: ItemCarrinho) {
-        let index = this.itens.findIndex((mItem) => mItem.id === item.id);
+    removerItem(idItem: number) {
+        let index = this.itens.findIndex((mItem) => mItem.id === idItem);
         if (index >= 0) {
             this.itens.splice(index, 1);
         }

@@ -44,7 +44,7 @@ describe("O carrinho de compras de um usuário", () => {
         carrinho.adicionarItem(pizzaGrande);
 
         // When eu removo o item
-        carrinho.removerItem(pizzaGrande);
+        carrinho.removerItem(pizzaGrande.id);
 
         // Then o carrinho deve estar vazio
         expect(carrinho.itens.length).toBe(0);
