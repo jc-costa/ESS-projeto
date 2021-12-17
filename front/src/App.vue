@@ -4,6 +4,7 @@
       app
       color="primary"
       dark
+      style="height: 64px"
     >
       <span>Nome App</span>
       <v-spacer></v-spacer>
@@ -54,3 +55,9 @@ export default {
   }
 }
 </script>
+
+<style>
+  div.v-application--wrap {
+    min-height:calc(100vh - 100px) !important;
+  }
+</style>
