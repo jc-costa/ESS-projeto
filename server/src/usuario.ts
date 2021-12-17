@@ -1,5 +1,4 @@
-import { Carrinho } from "./carrinho.js";
-import { ItemCarrinho } from "./itemCarrinho.js";
+import { Carrinho } from "./carrinho";
 
 export class Usuario {
     id: number;

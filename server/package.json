@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "npm run tsc && ENV_FILE=./config/.env.test jest",
+    "test:commit": "git stash --include-untracked --keep-index && npm run test && git stash pop",
     "tsc": "tsc",
     "start": "npm run tsc && node ./typeScript/server.js"
   },
