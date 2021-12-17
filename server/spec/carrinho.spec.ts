@@ -7,7 +7,7 @@ describe("O carrinho de compras de um usuário", () => {
     beforeEach(() => carrinho = new Carrinho());
 
     it("É inicialmente vazio", () => {
-        expect(carrinho.itens.length).toBe(0);
+        expect(carrinho.pegarItens().length).toBe(0);
     })
 
     it("Adiciona itens corretamente", () => {
@@ -23,10 +23,10 @@ describe("O carrinho de compras de um usuário", () => {
         carrinho.adicionarItem(pizzaGrande);
 
         // Then o carrinho deve conter 1 item
-        expect(carrinho.itens.length).toBe(1);
+        expect(carrinho.pegarItens().length).toBe(1);
 
         // And o item no carrinho deve ser o mesmo que eu adicionei
-        const item = carrinho.itens[0];
+        const item = carrinho.pegarItens()[0];
         expect(item.id).toBe(1);
         expect(item.nome).toBe("Pizza Grande");
         expect(item.preco).toBe(40.00);
@@ -47,7 +47,7 @@ describe("O carrinho de compras de um usuário", () => {
         carrinho.removerItem(pizzaGrande.id);
 
         // Then o carrinho deve estar vazio
-        expect(carrinho.itens.length).toBe(0);
+        expect(carrinho.pegarItens().length).toBe(0);
     })
 
     it("Atualiza a quantidade de um item corretamente", () => {
@@ -65,7 +65,7 @@ describe("O carrinho de compras de um usuário", () => {
         carrinho.atualizarItem(pizzaGrande);
 
         // Then a quantidade do item deve ser 2
-        const item = carrinho.itens[0];
+        const item = carrinho.pegarItens()[0];
         expect(item.quantidade).toBe(2);
 
         // When eu atualizo a quantidade do item para 0
@@ -73,7 +73,7 @@ describe("O carrinho de compras de um usuário", () => {
         carrinho.atualizarItem(pizzaGrande);
 
         // Then o item deve ser removido do carrinho
-        expect(carrinho.itens.length).toBe(0);
+        expect(carrinho.pegarItens().length).toBe(0);
     })
 
     it("Calcula preço total corretamente", () => {
@@ -121,6 +121,6 @@ describe("O carrinho de compras de um usuário", () => {
         carrinho.limpar();
 
         // Then o carrinho deve estar vazio
-        expect(carrinho.itens.length).toBe(0);
+        expect(carrinho.pegarItens().length).toBe(0);
     })
 });

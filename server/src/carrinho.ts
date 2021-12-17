@@ -2,11 +2,23 @@ import { ItemCarrinho } from "./itemCarrinho";
 import { Restaurante } from "./restaurante";
 
 export class Carrinho {
-    restaurante: Restaurante;
-    itens: ItemCarrinho[] = [];
+    private restaurante: Restaurante;
+    private itens: ItemCarrinho[] = [];
+
+    pegarRestaurante(): Restaurante {
+        return this.restaurante;
+    }
 
     pegarItens(): ItemCarrinho[] {
         return this.itens;
+    }
+
+    pegarDetalhamento() {
+        return {
+            restaurante: this.restaurante,
+            itens: this.itens,
+            precoTotal: this.calcularPrecoTotal()
+        }
     }
 
     limpar() {
