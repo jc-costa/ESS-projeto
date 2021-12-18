@@ -63,6 +63,25 @@ describe("Realização de Pedidos", () => {
         expect(restaurante.comandas.length).toEqual(1);
     })
 
+    it("Passa para 'CANCELADO_PELO_RESTAURANTE' quando o restaurante rejeita", () => {
+        const restaurante = new Restaurante(1, "Pizza Hut", "Rua A", "(99) 99999-9999", "10:00-22:00")
+        const pedido = new Pedido(<Pedido> {
+            id: 1,
+            itens: [{id: 1, descricao: "X-Salada", quantidade: 1, preco: 10.0, restaurante: restaurante}],
+            valorTotal: 10.0,
+            data: new Date(),
+            horaPedido: new Date(),
+            status: StatusPedido.AGUARDANDO_PAGAMENTO,
+            restaurante: restaurante
+        });
+        ServicoPagamento.getInstance().pagamentoAceito(ServicoPagamento.getInstance().pagamentos[0]);
+
+        restaurante.rejeitarComanda(restaurante.comandas[0]);
+
+        expect(pedido.status).toEqual(StatusPedido.CANCELADO_PELO_RESTAURANTE);
+
+    })
+
     it("Passa para 'SENDO_PREPARADO' quando o restaurante começa a preparar a comanda", () => {
         const restaurante = new Restaurante(1, "Pizza Hut", "Rua A", "(99) 99999-9999", "10:00-22:00")
         const pedido = new Pedido(<Pedido> {
@@ -98,6 +117,25 @@ describe("Realização de Pedidos", () => {
         restaurante.finalizarComanda(restaurante.comandas[0]);
 
         expect(pedido.status).toEqual(StatusPedido.AGUARDANDO_ENTREGADOR);
+    })
+
+    it("Passa para 'CANCELADO_PELO_RESTAURANTE' quando o restaurante cancela", () => {
+        const restaurante = new Restaurante(1, "Pizza Hut", "Rua A", "(99) 99999-9999", "10:00-22:00")
+        const pedido = new Pedido(<Pedido> {
+            id: 1,
+            itens: [{id: 1, descricao: "X-Salada", quantidade: 1, preco: 10.0, restaurante: restaurante}],
+            valorTotal: 10.0,
+            data: new Date(),
+            horaPedido: new Date(),
+            status: StatusPedido.AGUARDANDO_PAGAMENTO,
+            restaurante: restaurante
+        });
+        ServicoPagamento.getInstance().pagamentoAceito(ServicoPagamento.getInstance().pagamentos[0]);
+
+        restaurante.confirmarComanda(restaurante.comandas[0]);
+        restaurante.cancelarComanda(restaurante.comandas[0]);
+
+        expect(pedido.status).toEqual(StatusPedido.CANCELADO_PELO_RESTAURANTE);
     })
 
     it("Passa para 'SENDO_ENTREGUE' quando o entregador confirma a coleta", () => {

@@ -11,6 +11,11 @@ export class Restaurante {
     tempoMedioDePreparo: number;
     comandas: Comanda[] = [];
 
+
+    deveAceitar: boolean = true;
+    deveFinalizar: boolean = false;
+    deveCancelar: boolean = false;
+
     constructor(id: number, nome: string, endereco: string, telefone: string, horárioFuncionamento: string) {
         this.id = id;
         this.nome = nome;
@@ -26,6 +31,17 @@ export class Restaurante {
         });
         novaComanda.adicionarObservador(pedido);
         this.comandas.push(novaComanda);
+
+        if (this.deveAceitar) {
+            this.confirmarComanda(novaComanda);
+            if (this.deveFinalizar) {
+                this.finalizarComanda(novaComanda);
+            } else if (this.deveCancelar) {
+                this.cancelarComanda(novaComanda);
+            }
+        } else {
+            this.rejeitarComanda(novaComanda);
+        }
     }
 
     confirmarComanda(comanda: Comanda) {

@@ -13,21 +13,23 @@ export class ServicoPagamento {
         this.instance = null;
     }
 
-
+    deveAceitar: boolean = true;
     pagamentos: Pagamento[] = [];
 
     pagarPedido(pedido: Pedido) {
         const pagamento = new Pagamento();
         this.pagamentos.push(pagamento);
         pagamento.adicionarObservador(pedido);
+
+        if (this.deveAceitar) {
+            this.pagamentoAceito(pagamento);
+        } else {
+            this.pagamentoCancelado(pagamento)
+        }
     }
 
     pagamentoAceito(pagamento: Pagamento) {
         pagamento.atualizarStatus(StatusPagamento.APROVADO);
-    }
-
-    pagamentoRecusado(pagamento: Pagamento) {
-        pagamento.atualizarStatus(StatusPagamento.RECUSADO);
     }
 
     pagamentoCancelado(pagamento: Pagamento) {

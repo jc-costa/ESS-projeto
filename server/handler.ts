@@ -5,6 +5,7 @@ import { Carrinho } from './src/carrinho';
 import { ItemCarrinho } from './src/itemCarrinho';
 import { Usuario } from './src/usuario';
 import { Restaurante } from './src/restaurante'
+import { ServicoPagamento } from './src/servicoPagamento';
 
 var app = express();
 
@@ -19,10 +20,19 @@ app.use(allowCrossDomain);
 app.use(bodyParser.json());
 
 var configs = {
-    pagamentoFalha: false,
     pagamentoCancelado: false,
     restauranteRejeita: false,
+    restauranteFinaliza: true,
     restauranteCancela: false
+}
+
+function atualizarConfigs() {
+    ServicoPagamento.getInstance().deveAceitar = !configs.pagamentoCancelado;
+    restaurantes.forEach(restaurante => {
+        restaurante.deveAceitar = !configs.restauranteRejeita;
+        restaurante.deveFinalizar = configs.restauranteFinaliza;
+        restaurante.deveCancelar = configs.restauranteCancela;
+    })
 }
 
 var restaurantes = [
@@ -56,6 +66,7 @@ var usuarios = [
  */
 app.put('/configs', function (req, res) {
     configs = req.body;
+    atualizarConfigs();
 
     return res.status(200);
 });

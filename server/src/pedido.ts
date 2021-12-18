@@ -66,6 +66,7 @@ export class Pedido extends Observavel implements Observador {
                 case StatusPagamento.RECUSADO:
                     break;
                 case StatusPagamento.CANCELADO:
+                    this.atualizarStatus(StatusPedido.CANCELADO_PELO_CLIENTE);
                     break;
             }
         } else if (observavel instanceof Comanda) {
