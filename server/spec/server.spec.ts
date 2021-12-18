@@ -8,7 +8,7 @@ describe("GET /usuario/:id/carrinho", () => {
         const res = await request(app).get("/usuario/1/carrinho");
 
         expect(res.status).toBe(200);
-        expect(res.body.data.itens.length).toBe(0);
+        expect(res.body.data.itens.length).toBe(2);
     });
     
     it("Retorna erro 404 se o usuário não existe", async () => {

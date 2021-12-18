@@ -19,13 +19,7 @@ describe("Realização de Pedidos", () => {
 
     it("Cria um pedido baseado no carrinho", () => {
         // Given um usuario com um carrinho
-        const restaurante = new Restaurante(<Restaurante> {
-            id: 1,
-            nome: "Pizza Hut",
-            endereco: "Rua A",
-            telefone: "(99) 99999-9999",
-            horárioFuncionamento: "10:00-22:00"
-        })
+        const restaurante = new Restaurante(1, "Pizza Hut", "Rua A", "(99) 99999-9999", "10:00-22:00")
         const itens = [
             new ItemCarrinho(<ItemCarrinho>{
                 id: 1,
@@ -34,17 +28,16 @@ describe("Realização de Pedidos", () => {
                 preco: 40.0,
                 detalhes: "sem cebola",
                 restaurante: restaurante
-            }),
-            
-        ]
-        const carrinho = new Carrinho(itens)
-        usuario = new Usuario(1, "Breno Miranda", carrinho)
+            })
+        ];
+        const carrinho = new Carrinho(restaurante, itens);
+        usuario = new Usuario(1, "Breno Miranda", carrinho);
 
         // When ele realiza o pedido
-        usuario.realizarPedido()
+        usuario.realizarPedido();
 
         // Then o pedido deve ser adicionado a lista de pedidos do usuário
-        expect(usuario.pegarPedidos().length).toBe(1)
+        expect(usuario.pegarPedidos().length).toBe(1);
         
     })
 
@@ -53,12 +46,7 @@ describe("Realização de Pedidos", () => {
     })
 
     it("Passa para 'AGUARDANDO_CONFIRMAÇÃO' se o pagamento for aceito e cria uma comanda no restaurante", () => {
-        const restaurante = new Restaurante(<Restaurante> {
-            id: 1,
-            nome: "Restaurante 1",
-            endereco: "Rua 1",
-            telefone: "11-1111-1111",
-        });
+        const restaurante = new Restaurante(1, "Pizza Hut", "Rua A", "(99) 99999-9999", "10:00-22:00")
         const pedido = new Pedido(<Pedido> {
             id: 1,
             itens: [{id: 1, descricao: "X-Salada", quantidade: 1, preco: 10.0, restaurante: restaurante}],
@@ -76,12 +64,7 @@ describe("Realização de Pedidos", () => {
     })
 
     it("Passa para 'SENDO_PREPARADO' quando o restaurante começa a preparar a comanda", () => {
-        const restaurante = new Restaurante(<Restaurante> {
-            id: 1,
-            nome: "Restaurante 1",
-            endereco: "Rua 1",
-            telefone: "11-1111-1111",
-        });
+        const restaurante = new Restaurante(1, "Pizza Hut", "Rua A", "(99) 99999-9999", "10:00-22:00")
         const pedido = new Pedido(<Pedido> {
             id: 1,
             itens: [{id: 1, descricao: "X-Salada", quantidade: 1, preco: 10.0, restaurante: restaurante}],
@@ -99,12 +82,7 @@ describe("Realização de Pedidos", () => {
     })
 
     it("Passa para 'AGUARDANDO_ENTREGADOR' quando o restaurante finaliza o preparo", () => {
-        const restaurante = new Restaurante(<Restaurante> {
-            id: 1,
-            nome: "Restaurante 1",
-            endereco: "Rua 1",
-            telefone: "11-1111-1111",
-        });
+        const restaurante = new Restaurante(1, "Pizza Hut", "Rua A", "(99) 99999-9999", "10:00-22:00")
         const pedido = new Pedido(<Pedido> {
             id: 1,
             itens: [{id: 1, descricao: "X-Salada", quantidade: 1, preco: 10.0, restaurante: restaurante}],
@@ -123,12 +101,7 @@ describe("Realização de Pedidos", () => {
     })
 
     it("Passa para 'SENDO_ENTREGUE' quando o entregador confirma a coleta", () => {
-        const restaurante = new Restaurante(<Restaurante> {
-            id: 1,
-            nome: "Restaurante 1",
-            endereco: "Rua 1",
-            telefone: "11-1111-1111",
-        });
+        const restaurante = new Restaurante(1, "Pizza Hut", "Rua A", "(99) 99999-9999", "10:00-22:00")
         const pedido = new Pedido(<Pedido> {
             id: 1,
             itens: [{id: 1, descricao: "X-Salada", quantidade: 1, preco: 10.0, restaurante: restaurante}],
@@ -147,12 +120,7 @@ describe("Realização de Pedidos", () => {
     })
 
     it("Passa para 'AGUARDANDO_COLETA' quando o entregador chega ao destino", () => {
-        const restaurante = new Restaurante(<Restaurante> {
-            id: 1,
-            nome: "Restaurante 1",
-            endereco: "Rua 1",
-            telefone: "11-1111-1111",
-        });
+        const restaurante = new Restaurante(1, "Pizza Hut", "Rua A", "(99) 99999-9999", "10:00-22:00")
         const pedido = new Pedido(<Pedido> {
             id: 1,
             itens: [{id: 1, descricao: "X-Salada", quantidade: 1, preco: 10.0, restaurante: restaurante}],
@@ -171,12 +139,7 @@ describe("Realização de Pedidos", () => {
     })
 
     it("Passa para 'COMPLETO' quando o entregador confirma a entrega", () => {
-        const restaurante = new Restaurante(<Restaurante> {
-            id: 1,
-            nome: "Restaurante 1",
-            endereco: "Rua 1",
-            telefone: "11-1111-1111",
-        });
+        const restaurante = new Restaurante(1, "Pizza Hut", "Rua A", "(99) 99999-9999", "10:00-22:00")
         const pedido = new Pedido(<Pedido> {
             id: 1,
             itens: [{id: 1, descricao: "X-Salada", quantidade: 1, preco: 10.0, restaurante: restaurante}],

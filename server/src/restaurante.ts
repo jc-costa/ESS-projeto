@@ -11,12 +11,12 @@ export class Restaurante {
     tempoMedioDePreparo: number;
     comandas: Comanda[] = [];
 
-    constructor(restaurante: Restaurante) {
-        this.id = restaurante.id;
-        this.nome = restaurante.nome;
-        this.endereco = restaurante.endereco;
-        this.telefone = restaurante.telefone;
-        this.horárioFuncionamento = restaurante.horárioFuncionamento;
+    constructor(id: number, nome: string, endereco: string, telefone: string, horárioFuncionamento: string) {
+        this.id = id;
+        this.nome = nome;
+        this.endereco = endereco;
+        this.telefone = telefone;
+        this.horárioFuncionamento = horárioFuncionamento;
     }
 
     gerarComanda(pedido: Pedido) {
