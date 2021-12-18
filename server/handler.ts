@@ -154,4 +154,18 @@ app.get('/usuario/:id/carrinho/total', function (req, res) {
     }
 });
 
+/** 
+ * @api {get} /usuario/:id/pedidos Retorna os pedidos do usuário
+ */
+app.get('/usuario/:id/pedidos', function (req, res) {
+    const id: number = +req.params.id;
+    const usuario = usuarios.find(u => u.id == id);
+
+    if (usuario) {
+        return res.status(200).json({data: usuario.pegarPedidos()});
+    } else {
+        return res.status(404).json({error: "Usuário não encontrado"});
+    }
+})
+
 export { app };
