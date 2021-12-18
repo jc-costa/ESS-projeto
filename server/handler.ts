@@ -58,7 +58,7 @@ var itens = [
 ]
 var usuarios = [
     new Usuario(1, "Breno Miranda", new Carrinho(restaurantes[0], itens)),
-    new Usuario(2, "Paulo Borba", undefined, [])
+    new Usuario(2, "Paulo Borba", undefined, [new Pedido(<Pedido> {id: 1, itens: [itens[0]], valorTotal: 40, status: StatusPedido.COMPLETO, restaurante: restaurantes[0]})])
 ]
 
 /*
