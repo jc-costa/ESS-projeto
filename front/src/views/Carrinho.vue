@@ -1,14 +1,19 @@
 <template>
 <v-app>
-  <v-container class="d-flex flex-column grow">
+  <v-skeleton-loader type="card, list-item" v-if="this.loading"></v-skeleton-loader>
+  <v-container v-else class="d-flex flex-column grow">
         <v-row no-gutters class="grow mb-5">
-          <v-col>
-            <v-row no-gutters>
-              <Pedido />
-            </v-row>
-          </v-col>
+          <v-row v-if="carrinhoVazio" justify="center" align="center">
+            <h2>Não há pedidos no carrinho</h2>
+          </v-row>
+          <v-row v-else no-gutters>
+            <Pedido
+              :carrinho="this.carrinho"
+              @remove-pedido="removeItem($event)"
+              />
+          </v-row>
         </v-row>
-        <v-row no-gutters class="align-end shrink">
+        <v-row v-if="!carrinhoVazio" no-gutters class="align-end shrink">
           <v-col>
             <v-card style="height: 90px">
               <v-card-text class="rounded-xl">
@@ -18,7 +23,7 @@
                       <h2 class="ma-0">Valor total:</h2>
                     </v-row>
                     <v-row>
-                      <h4 class="ml-10" style="font-weight:normal">R$ YY,YY</h4>
+                      <h3 class="ml-10" style="font-weight:normal">R$ {{this.carrinho.data.precoTotal}}</h3>
                     </v-row>
                   </v-col>
                   <v-col cols="2" class="d-flex align-end justify-center">
@@ -35,17 +40,65 @@
 
 <script>
 import Pedido from '../components/pedidoCarrinho.vue'
+const axios = require('axios')
 export default {
   name: 'Carrinho',
 
   data () {
     return {
-      carrinho: this.$store.state.carrinho
+      // carrinho: this.$store.state.carrinho,
+      loading: true,
+      carrinho: null
     }
   },
 
   components: {
     Pedido
+  },
+
+  computed: {
+    carrinhoVazio () {
+      return this.carrinho.data.itens.length === 0
+    }
+  },
+
+  methods: {
+    async getCarrinho () {
+      try {
+        await axios.get('http://localhost:3000/usuario/1/carrinho')
+          .then(resp => {
+            console.log('Data received')
+            console.log(resp.data)
+            this.carrinho = resp.data
+            this.loading = false
+          })
+        // const data = req.data
+        // console.log(data)
+      } catch (e) {
+        console.log(e)
+        // alert(e)
+      }
+    },
+    async removeItem (id) {
+      try {
+        console.log('Removing item')
+        await axios.delete(`http://localhost:3000/usuario/1/carrinho/${id}`)
+          .then(resp => {
+            console.log('Pedido excluido')
+            console.log(resp.data)
+            this.carrinho = resp.data
+            // this.loading = false
+          })
+        // const data = req.data
+        // console.log(data)
+      } catch (e) {
+        console.log(e)
+        // alert(e)
+      }
+    }
+  },
+  created () {
+    this.getCarrinho()
   }
 
 }
