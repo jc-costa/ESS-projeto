@@ -36,6 +36,40 @@
           </v-row>
         </v-col>
       </v-row>
+      <template>
+        <!-- <v-btn @click="showDialog = true">Show Dialog</v-btn> -->
+        <v-row justify="space-around">
+          <v-col cols="auto">
+            <v-dialog
+              overflow="hidden"
+              v-if="showDialog" v-model="showDialog"
+              transition="dialog-top-transition"
+              max-width="600"
+            >
+              <template>
+                <v-card style="overflow: hidden">
+                  <v-row justify="center">
+                    <v-icon v-if="statusPedido.confirmado" size="200" color="green">mdi-check-bold</v-icon>
+                  </v-row>
+                  <v-row justify="center">
+                    <v-icon v-if="!statusPedido.confirmado" size="200" color="red">mdi-alert-circle-outline</v-icon>
+                  </v-row>
+                  <v-card-text>
+                    <div v-if="statusPedido.confirmado" class="text-center text-h2 pa-12">Pedido confirmado!</div>
+                    <div v-if="!statusPedido.confirmado" class="text-center text-h2 pa-12">Pedido Negado!</div>
+                  </v-card-text>
+                  <v-card-actions class="justify-end">
+                    <v-btn
+                      text
+                      @click="showDialog = false"
+                    >Ok</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </template>
+            </v-dialog>
+          </v-col>
+        </v-row>
+      </template>
     </div>
 </template>
 
@@ -45,12 +79,37 @@ export default {
   data () {
     return {
       // data -> Todos os pedidos dessa data
-      pedidos: this.$store.state.pedidos
+      pedidos: this.$store.state.pedidos,
+      statusPedido: this.$store.state.statusPedido,
+      showDialog: false
+
     }
   },
   methods: {
     detalhePedido (id) {
       this.$router.push(`/detalhe/${id}`)
+    },
+
+    pedidoAceito () {
+      if (Math.random() >= 0.50) {
+        this.statusPedido.confirmado = true
+      }
+      this.showDialog = this.statusPedido.confirmado
+    }
+  },
+
+  beforeRouteEnter (to, from, next) {
+    next((vm) => {
+      vm.from = from
+    })
+  },
+
+  beforeMount () {
+    this.statusPedido.confirmado = false
+    // console.log(this.$router.history._startLocation)
+    if (this.$router.history._startLocation === '/carrinho' && this.statusPedido.pagamento === true) {
+      this.pedidoAceito()
+      console.log(this.showDialog)
     }
   },
 
