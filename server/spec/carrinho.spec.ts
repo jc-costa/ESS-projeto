@@ -15,7 +15,7 @@ describe("O carrinho de compras de um usuário", () => {
         // When eu adiciono um item
         const pizzaGrande = <ItemCarrinho> {
             id: 1,
-            nome: "Pizza Grande",
+            descricao: "Pizza Grande",
             preco: 40.00,
             quantidade: 1
         }
@@ -28,7 +28,7 @@ describe("O carrinho de compras de um usuário", () => {
         // And o item no carrinho deve ser o mesmo que eu adicionei
         const item = carrinho.pegarItens()[0];
         expect(item.id).toBe(1);
-        expect(item.nome).toBe("Pizza Grande");
+        expect(item.descricao).toBe("Pizza Grande");
         expect(item.preco).toBe(40.00);
         expect(item.quantidade).toBe(1);
     })
@@ -37,7 +37,7 @@ describe("O carrinho de compras de um usuário", () => {
         // Given eu tenho um carrinho com um item
         const pizzaGrande = <ItemCarrinho> {
             id: 1,
-            nome: "Pizza Grande",
+            descricao: "Pizza Grande",
             preco: 40.00,
             quantidade: 1
         }
@@ -54,7 +54,7 @@ describe("O carrinho de compras de um usuário", () => {
         // Given eu tenho um carrinho com o item ("Pizza Grande", 40.00, 1)
         var pizzaGrande = <ItemCarrinho> {
             id: 1,
-            nome: "Pizza Grande",
+            descricao: "Pizza Grande",
             preco: 40.00,
             quantidade: 1
         }
@@ -80,13 +80,13 @@ describe("O carrinho de compras de um usuário", () => {
         // Given eu tenho um carrinho com o item ("Pizza Grande", 40.00, 1) e o item ("Pizza Média", 30.00, 1)
         const pizzaGrande = <ItemCarrinho> {
             id: 1,
-            nome: "Pizza Grande",
+            descricao: "Pizza Grande",
             preco: 40.00,
             quantidade: 1
         }
         const pizzaMedia = <ItemCarrinho> {
             id: 2,
-            nome: "Pizza Média",
+            descricao: "Pizza Média",
             preco: 30.00,
             quantidade: 1
         }
@@ -104,13 +104,13 @@ describe("O carrinho de compras de um usuário", () => {
         // Given eu tenho um carrinho com o item ("Pizza Grande", 40.00, 1) e o item ("Pizza Média", 30.00, 1)
         const pizzaGrande = <ItemCarrinho> {
             id: 1,
-            nome: "Pizza Grande",
+            descricao: "Pizza Grande",
             preco: 40.00,
             quantidade: 1
         }
         const pizzaMedia = <ItemCarrinho> {
             id: 2,
-            nome: "Pizza Média",
+            descricao: "Pizza Média",
             preco: 30.00,
             quantidade: 1
         }
