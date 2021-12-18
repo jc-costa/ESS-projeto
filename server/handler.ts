@@ -188,6 +188,9 @@ app.post('/usuario/:id/pedidos', function (req, res) {
     }
 })
 
+/** 
+ * @api {put} /usuario/:id/pedidos/:idPedido/cancelar Cancela o pedido com a id informada, se ainda for possível. Senão, retorna erro 409.
+ */
 app.put('/usuario/:id/pedidos/:idPedido/cancelar', function (req, res) {
     const id: number = +req.params.id;
     const usuario = usuarios.find(u => u.id == id);
@@ -199,7 +202,7 @@ app.put('/usuario/:id/pedidos/:idPedido/cancelar', function (req, res) {
             pedido.cancelar();
             return res.status(200).json({data: pedido.pegarInformacao()});
         } catch (erro) {
-            return res.status(500).json({error: erro.message});
+            return res.status(409).json({error: erro.message});
         }
     } else {
         return res.status(404).json({error: "Usuário não encontrado"});
