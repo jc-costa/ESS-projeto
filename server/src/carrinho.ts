@@ -5,6 +5,22 @@ export class Carrinho {
     private restaurante: Restaurante = null;
     private itens: ItemCarrinho[] = [];
 
+    constructor(itens: ItemCarrinho[] = undefined) {
+        if (!itens) {
+            return
+        }
+        
+        this.itens = itens;
+        this.restaurante = itens[0].restaurante;
+
+        // Verifica se todos os itens são do mesmo restaurante
+        this.itens.forEach(item => {
+            if (item.restaurante != this.restaurante) {
+                throw new TypeError("Todos os itens devem ser do mesmo restaurante");
+            }
+        });
+    }
+
     pegarRestaurante(): Restaurante {
         return this.restaurante;
     }

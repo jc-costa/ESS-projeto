@@ -31,6 +31,7 @@ export class Usuario {
         if (this.pegarCarrinho().pegarItens().length === 0) {
             throw new Error("Carrinho vazio");
         }
+
         let pedido = new Pedido(<Pedido>{
             id: this.pedidos.length + 1,
             status: StatusPedido.AGUARDANDO_PAGAMENTO,
@@ -41,6 +42,7 @@ export class Usuario {
             restaurante: this.carrinho.pegarRestaurante()
         });
         pedido.adicionarObservador(this);
+        this.pedidos.push(pedido);
     }
 
     notificarMudanca(pedido: Pedido) {

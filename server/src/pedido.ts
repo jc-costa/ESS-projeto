@@ -16,7 +16,6 @@ export enum StatusPedido {
     CANCELADO_PELO_RESTAURANTE
 }
 
-// TODO: Fazer o Pedido ser um observable que o usuário pode observar no evento de mudança de status
 export class Pedido extends Observavel implements Observador {
     id: number;
     itens: ItemCarrinho[];

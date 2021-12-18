@@ -3,6 +3,7 @@ import { Restaurante } from '../src/restaurante';
 import { ItemCarrinho } from '../src/itemCarrinho';
 import { Pedido, StatusPedido } from '../src/pedido';
 import { ServicoPagamento } from '../src/servicoPagamento';
+import { Carrinho } from '../src/carrinho';
 
 describe("Realização de Pedidos", () => {
     var usuario: Usuario;
@@ -17,6 +18,33 @@ describe("Realização de Pedidos", () => {
     })
 
     it("Cria um pedido baseado no carrinho", () => {
+        // Given um usuario com um carrinho
+        const restaurante = new Restaurante(<Restaurante> {
+            id: 1,
+            nome: "Pizza Hut",
+            endereco: "Rua A",
+            telefone: "(99) 99999-9999",
+            horárioFuncionamento: "10:00-22:00"
+        })
+        const itens = [
+            new ItemCarrinho(<ItemCarrinho>{
+                id: 1,
+                descricao: "Pizza",
+                quantidade: 1,
+                preco: 40.0,
+                detalhes: "sem cebola",
+                restaurante: restaurante
+            }),
+            
+        ]
+        const carrinho = new Carrinho(itens)
+        usuario = new Usuario(1, "Breno Miranda", carrinho)
+
+        // When ele realiza o pedido
+        usuario.realizarPedido()
+
+        // Then o pedido deve ser adicionado a lista de pedidos do usuário
+        expect(usuario.pegarPedidos().length).toBe(1)
         
     })
 
