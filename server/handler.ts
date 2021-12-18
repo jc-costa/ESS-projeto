@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import { Carrinho } from './src/carrinho';
 import { ItemCarrinho } from './src/itemCarrinho';
 import { Usuario } from './src/usuario';
+import { Restaurante } from './src/restaurante'
 
 var app = express();
 
@@ -17,10 +18,47 @@ app.use(allowCrossDomain);
 
 app.use(bodyParser.json());
 
+var configs = {
+    pagamentoFalha: false,
+    pagamentoCancelado: false,
+    restauranteRejeita: false,
+    restauranteCancela: false
+}
+
+var restaurantes = [
+    new Restaurante(1, "Pizza Hut", "Rua A", "(99) 9999-9999", "10:00 - 21:30"),
+]
+var itens = [
+    new ItemCarrinho(<ItemCarrinho> {
+        id: 1,
+        descricao: "Pizza Grande",
+        preco: 40,
+        quantidade: 1,
+        detalhes: "Sem cebola",
+        restaurante: restaurantes[0]
+    }),
+    new ItemCarrinho(<ItemCarrinho> {
+        id: 1,
+        descricao: "Coca-Cola",
+        preco: 10,
+        quantidade: 1,
+        detalhes: "",
+        restaurante: restaurantes[0]
+    })
+]
 var usuarios = [
-    new Usuario(1, "Breno Miranda"),
-    new Usuario(2, "Paulo Borba")
-];
+    new Usuario(1, "Breno Miranda", new Carrinho(restaurantes[0], itens)),
+    new Usuario(2, "Paulo Borba", undefined, [])
+]
+
+/*
+ * @api {put} /configs Define as configurações pra propósitos de teste
+ */
+app.put('/configs', function (req, res) {
+    configs = req.body;
+
+    return res.status(200);
+});
 
 /**
  * @api {get} /usuarios/:id/carrinho Retorna os itens do carrinho do usuário // TODO: Melhor retornar o carrinho completo (uma representação dele)
