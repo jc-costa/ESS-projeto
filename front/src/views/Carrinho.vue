@@ -81,6 +81,11 @@
             </v-card>
           </v-col>
         </v-row>
+        <template>
+          <v-snackbar :color="snackbar.color" v-model="snackbar.show">
+            {{ snackbar.message }}
+          </v-snackbar>
+        </template>
   </v-container>
 </v-app>
 </template>
@@ -95,16 +100,32 @@ export default {
       overlay: false,
       carrinho: this.$store.state.carrinho,
       statusPedido: this.$store.state.statusPedido,
-      showDialog: false
+      showDialog: false,
+      snackbar: {
+        show: false,
+        message: null,
+        color: null
+      }
     }
   },
 
   watch: {
     overlay (val) {
       this.tentaPagar()
-      setTimeout(() => {
-        this.showDialog = true
-      }, 950)
+      if (this.carrinho.itens.length) {
+        setTimeout(() => {
+          this.showDialog = true
+        }, 950)
+      } else {
+        this.snackbar = {
+          message: 'O carrinho está vazio',
+          color: 'error',
+          show: true
+        }
+        setTimeout(() => {
+          this.snackbar.show = false
+        }, 2000)
+      }
       val &&
       setTimeout(() => {
         this.overlay = false
