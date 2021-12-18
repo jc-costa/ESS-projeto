@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="ma-0 pa-0">
-    <div v-for="(pedido, index) in carrinho.itens" :key="index">
+    <div v-for="(pedido, index) in this.carrinho.data.itens" :key="index">
       <v-card class="mt-5">
         <v-card-text>
           <v-row no-gutters>
@@ -11,18 +11,18 @@
               <v-row v-if="pedido.detalhes">
                 <v-col>
                   <v-row>
-                    <h3>Detalhes: </h3>
+                    <h3>Notas do cliente: </h3>
                   </v-row>
-                  <v-row v-for="(detalhe, index) in pedido.detalhes" :key="index">
-                    <span id="detalhe">- {{detalhe}}</span>
+                  <v-row>
+                    <span id="detalhe">- {{pedido.detalhes}}</span>
                   </v-row>
                 </v-col>
               </v-row>
               <v-row>
-                <h3>Quantidade: {{pedido.qtd}}</h3>
+                <h3>Quantidade: {{pedido.quantidade}}</h3>
               </v-row>
               <v-row>
-                <h3 class="last">Valor: R$ {{pedido.valor}}</h3>
+                <h3 class="last">Valor: R$ {{pedido.preco * pedido.quantidade}}</h3>
               </v-row>
             </v-col>
             <v-col class="d-flex justify-end">
@@ -33,12 +33,12 @@
                     v-on="on"
                     icon
                   >
-                    <v-icon>mdi-arrow-down-bold-box</v-icon>
+                    <v-icon>mdi-chevron-down</v-icon>
                   </v-btn>
                 </template>
                 <v-list>
                   <v-list-item
-                    v-for="(item, index) in items"
+                    v-for="(item, index) in dropdown"
                     :key="index"
                     link
                   >
@@ -72,24 +72,29 @@
 
 export default {
   name: 'Pedidos',
+  props: ['carrinho'],
   data () {
     return {
-      items: [
+      dropdown: [
         { title: 'Editar Pedido' },
         { title: 'Cancelar Pedido' }
       ],
       dialog: false,
-      idPedido: null
+      editDialog: false,
+      idPedido: null,
+      loading: true,
+      detalhe: '',
+      editPedido: ''
     }
   },
   created () {
     // this.addData()
   },
   computed: {
-    carrinho () {
-      console.log(this.$store.state.carrinho)
-      return this.$store.state.carrinho
-    }
+    // carrinho () {
+    //   // console.log(this.$store.state.carrinho)
+    //   return this.$store.state.carrinho
+    // }
   },
   methods: {
     action (item, pedido) {
@@ -108,7 +113,8 @@ export default {
     },
     cancelarPedido () {
       console.log(this.idPedido + ' Pedido Cancelado')
-      this.$store.dispatch('removePedidoCarrinho', this.idPedido)
+      this.$emit('remove-pedido', this.idPedido)
+      // this.$store.dispatch('removePedidoCarrinho', this.idPedido)
       this.closeDialog()
     },
     showDialog () {
