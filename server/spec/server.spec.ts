@@ -45,7 +45,11 @@ describe("GET /usuario/:id/carrinho/total", () => {
 
 describe("GET /usuario/:id/pedidos", () => {
     it("Retorna os pedidos do usuário corretamente", async () => {
-        const res = await request(app).get("/usuario/1/pedidos");
+        var res = await request(app).get("/usuario/1/pedidos");
+
+        expect(res.status).toBe(200);
+
+        res = await request(app).get('/usuario/2/pedidos');
 
         expect(res.status).toBe(200);
     });
