@@ -53,10 +53,14 @@
                               <template>
                                 <v-card style="overflow: hidden">
                                   <v-row justify="center">
-                                    <v-icon size="200" color="green">mdi-check-bold</v-icon>
+                                    <v-icon v-if="statusPedido.pagamento" size="200" color="green">mdi-check-bold</v-icon>
+                                  </v-row>
+                                  <v-row justify="center">
+                                    <v-icon v-if="!statusPedido.pagamento" size="200" color="red">mdi-alert-circle-outline</v-icon>
                                   </v-row>
                                   <v-card-text>
-                                    <div class="text-center text-h2 pa-12">Pagamento confirmado!</div>
+                                    <div v-if="statusPedido.pagamento" class="text-center text-h2 pa-12">Pagamento confirmado!</div>
+                                    <div v-if="!statusPedido.pagamento" class="text-center text-h2 pa-12">Pagamento Negado!</div>
                                   </v-card-text>
                                   <v-card-actions class="justify-end">
                                     <v-btn
@@ -89,12 +93,15 @@ export default {
   data () {
     return {
       overlay: false,
-      carrinho: this.$store.state.carrinho
+      carrinho: this.$store.state.carrinho,
+      statusPedido: this.$store.state.statusPedido,
+      showDialog: false
     }
   },
 
   watch: {
     overlay (val) {
+      this.tentaPagar()
       setTimeout(() => {
         this.showDialog = true
       }, 950)
@@ -107,8 +114,22 @@ export default {
 
   methods: {
     goToPedidos () {
-      this.$router.push({ path: '/pedidos', query: { pedido: 'aceito' } })
+      if (this.statusPedido.pagamento) {
+        this.$router.push('/pedidos')
+      } else {
+        this.showDialog = false
+      }
+    },
+
+    tentaPagar () {
+      if (Math.random() >= 0.3) {
+        this.statusPedido.pagamento = true
+      }
     }
+  },
+
+  mounted () {
+    this.statusPedido.pagamento = false
   },
 
   components: {

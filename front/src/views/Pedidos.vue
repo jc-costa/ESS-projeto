@@ -90,11 +90,16 @@ export default {
       this.$router.push(`/detalhe/${id}`)
     },
 
+    limpaCarrinho () {
+      this.$store.dispatch('limparCarrinho')
+    },
+
     pedidoAceito () {
-      if (Math.random() >= 0.50) {
+      if (Math.random() >= 0.3) {
         this.statusPedido.confirmado = true
+        this.limpaCarrinho()
       }
-      this.showDialog = this.statusPedido.confirmado
+      this.showDialog = true
     }
   },
 
@@ -106,7 +111,7 @@ export default {
 
   beforeMount () {
     this.statusPedido.confirmado = false
-    // console.log(this.$router.history._startLocation)
+    console.log(this.$router.history._startLocation)
     if (this.$router.history._startLocation === '/carrinho' && this.statusPedido.pagamento === true) {
       this.pedidoAceito()
       console.log(this.showDialog)

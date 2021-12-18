@@ -60,8 +60,11 @@ export default new Vuex.Store({
           descricao: 'Parmegiana'
         }
       ]
+    },
+    statusPedido: {
+      pagamento: false,
+      confirmado: false
     }
-
   },
   mutations: {
     mRemovePedido (state, payload) {
@@ -73,6 +76,12 @@ export default new Vuex.Store({
     },
     addPedido (state, payload) {
       state.carrinho = payload
+    },
+    mLimpaCarrinho (state) {
+      state.carrinho = {
+        nomeRestaurante: '',
+        itens: []
+      }
     }
   },
   actions: {
@@ -83,6 +92,10 @@ export default new Vuex.Store({
     adicionaItens ({ commit }, payload) {
       console.log(payload.nomeRestaurante)
       commit('addPedido', payload)
+    },
+    limparCarrinho ({ commit }) {
+      console.log('Removendo todos os pedidos da store')
+      commit('mLimpaCarrinho')
     }
   },
   modules: {
