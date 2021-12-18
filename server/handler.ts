@@ -188,4 +188,22 @@ app.post('/usuario/:id/pedidos', function (req, res) {
     }
 })
 
+app.put('/usuario/:id/pedidos/:idPedido/cancelar', function (req, res) {
+    const id: number = +req.params.id;
+    const usuario = usuarios.find(u => u.id == id);
+
+    if (usuario) {
+        const idPedido = +req.params.idPedido;
+        const pedido = usuario.pegarPedidos().find(pedido => pedido.id == idPedido);
+        try {
+            pedido.cancelar();
+            return res.status(200).json({data: pedido.pegarInformacao()});
+        } catch (erro) {
+            return res.status(500).json({error: erro.message});
+        }
+    } else {
+        return res.status(404).json({error: "Usuário não encontrado"});
+    }
+})
+
 export { app };

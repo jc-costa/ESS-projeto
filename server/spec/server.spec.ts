@@ -83,13 +83,13 @@ describe("POST /usuario/:id/pedidos", () => {
 
 describe("PUT /usuario/:id/pedidos/:idPedido/cancelar", () => {
     it("Cancela o pedido", async () => {
-        const res = await request(app).post("/usuario/1/pedidos");
+        const res = await request(app).put("/usuario/2/pedidos/1/cancelar");
 
         expect(res.status).toBe(200);
     })
 
     it("Retorna 404 se o usuário não está no sistema", async () => {
-        const res = await request(app).post("/usuario/10/pedidos");
+        const res = await request(app).put("/usuario/10/pedidos/1/cancelar");
 
         expect(res.status).toBe(404);
     });

@@ -73,6 +73,10 @@ export class Pedido extends Observavel implements Observador {
         this.notificarObservadores();
     }
 
+    cancelar() {
+        this.atualizarStatus(StatusPedido.CANCELADO_PELO_CLIENTE);
+    }
+
     notificarMudanca(observavel: Observavel) {
         if (observavel instanceof Pagamento) {
             switch (observavel.status) {
