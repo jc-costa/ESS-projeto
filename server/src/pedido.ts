@@ -40,6 +40,22 @@ export class Pedido extends Observavel implements Observador {
         ServicoPagamento.getInstance().pagarPedido(this)
     }
 
+    pegarInformacao() {
+        return {
+            id: this.id,
+            itens: this.itens.map(item => item.pegarInformacao()),
+            valorTotal: this.valorTotal,
+            data: this.data,
+            horaPedido: this.horaPedido,
+            horaEntrega: this.horaEntrega,
+            status: this.status,
+            restaurante: {
+                id: this.restaurante.id,
+                nome: this.restaurante.nome,
+            }
+        }
+    }
+
     private atualizarStatus(newStatus: StatusPedido) {
         if (newStatus === StatusPedido.CANCELADO_PELO_CLIENTE) {
             // Verificar que o pedido ainda pode ser cancelado

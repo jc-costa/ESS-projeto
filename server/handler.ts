@@ -6,6 +6,7 @@ import { ItemCarrinho } from './src/itemCarrinho';
 import { Usuario } from './src/usuario';
 import { Restaurante } from './src/restaurante'
 import { ServicoPagamento } from './src/servicoPagamento';
+import { Pedido, StatusPedido } from './src/pedido';
 
 var app = express();
 
@@ -162,7 +163,26 @@ app.get('/usuario/:id/pedidos', function (req, res) {
     const usuario = usuarios.find(u => u.id == id);
 
     if (usuario) {
-        return res.status(200).json({data: usuario.pegarPedidos()});
+        return res.status(200).json({data: usuario.pegarPedidos().map(pedido => pedido.pegarInformacao())});
+    } else {
+        return res.status(404).json({error: "Usuário não encontrado"});
+    }
+})
+
+/** 
+ * @api {post} /usuario/:id/pedidos Cria um novo pedido a partir do carrinho. Retorna um erro se o carrinho estiver vazio.
+ */
+app.post('/usuario/:id/pedidos', function (req, res) {
+    const id: number = +req.params.id;
+    const usuario = usuarios.find(u => u.id == id);
+
+    if (usuario) {
+        try {
+            usuario.realizarPedido();
+        } catch (erro) {
+            return res.status(409).json({error: "Não é possível criar um pedido com o carrinho vazio"});
+        }
+        return res.status(200).json({data: usuario.pegarPedidos().map(pedido => pedido.pegarInformacao())});
     } else {
         return res.status(404).json({error: "Usuário não encontrado"});
     }
