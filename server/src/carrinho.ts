@@ -25,10 +25,13 @@ export class Carrinho {
         return this.itens;
     }
 
-    pegarDetalhamento() {
+    pegarInformacao() {
         return {
-            restaurante: this.restaurante,
-            itens: this.itens,
+            restaurante: {
+                id: this.restaurante.id,
+                nome: this.restaurante.nome
+            },
+            itens: this.itens.map(item => item.pegarInformacao()),
             precoTotal: this.calcularPrecoTotal()
         }
     }

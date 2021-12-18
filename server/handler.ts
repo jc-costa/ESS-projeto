@@ -79,7 +79,7 @@ app.get('/usuario/:id/carrinho', function (req, res) {
     const usuario = usuarios.find(u => u.id == id);
 
     if (usuario) {
-        return res.status(200).json({data: usuario.pegarCarrinho().pegarDetalhamento()});
+        return res.status(200).json({data: usuario.pegarCarrinho().pegarInformacao()});
     } else {
         return res.status(404).json({error: "Usuário não encontrado"});
     }
@@ -96,7 +96,7 @@ app.post('/usuario/:id/carrinho', function (req, res) {
         const newItem: ItemCarrinho = <ItemCarrinho> req.body;
         try {
             usuario.pegarCarrinho().adicionarItem(newItem);
-            return res.status(200).json({data: usuario.pegarCarrinho().pegarDetalhamento()});
+            return res.status(200).json({data: usuario.pegarCarrinho().pegarInformacao()});
         } catch (error) {
             console.log(error);
         } 
@@ -118,7 +118,7 @@ app.delete('/usuario/:id/carrinho/:idItem', function (req, res) {
         const idItem: number = +req.params.idItem;
         usuario.pegarCarrinho().removerItem(idItem);
 
-        return res.status(200).json({data: usuario.pegarCarrinho().pegarDetalhamento()});
+        return res.status(200).json({data: usuario.pegarCarrinho().pegarInformacao()});
     } else {
         return res.status(404).json({error: "Usuário não encontrado"});
     }
@@ -134,7 +134,7 @@ app.put('/usuario/:id/carrinho', function (req, res) {
     if (usuario) {
         const item: ItemCarrinho = <ItemCarrinho> req.body;
         usuario.pegarCarrinho().atualizarItem(item);
-        return res.status(200).json({data: usuario.pegarCarrinho().pegarDetalhamento()});
+        return res.status(200).json({data: usuario.pegarCarrinho().pegarInformacao()});
     } else {
         return res.status(404).json({error: "Usuário não encontrado"});
     }
