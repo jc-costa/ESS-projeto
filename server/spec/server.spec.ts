@@ -42,3 +42,51 @@ describe("GET /usuario/:id/carrinho/total", () => {
         
     }); 
 });
+
+describe("GET /usuario/:id/pedidos", () => {
+    it("Retorna os pedidos do usuário corretamente", async () => {
+        const res = await request(app).get("/usuario/1/pedidos");
+
+        expect(res.status).toBe(200);
+    });
+
+    it("Retorna 404 se o usuário não está no sistema", async () => {
+        const res = await request(app).get("/usuario/10/pedidos");
+
+        expect(res.status).toBe(404);
+    });
+})
+
+describe("POST /usuario/:id/pedidos", () => {
+    it("Cria um pedido a partir do carrinho", async () => {
+        const res = await request(app).post("/usuario/1/pedidos");
+
+        expect(res.status).toBe(200);
+    });
+
+    it("Retorna erro 409 se o carrinho do usuário está vazio", async () => {
+        const res = await request(app).post("/usuario/2/pedidos");
+
+        expect(res.status).toBe(409);
+    });
+
+    it("Retorna 404 se o usuário não está no sistema", async () => {
+        const res = await request(app).post("/usuario/10/pedidos");
+
+        expect(res.status).toBe(404);
+    });
+})
+
+describe("PUT /usuario/:id/pedidos/:idPedido/cancelar", () => {
+    it("Cancela o pedido", async () => {
+        const res = await request(app).post("/usuario/1/pedidos");
+
+        expect(res.status).toBe(200);
+    })
+
+    it("Retorna 404 se o usuário não está no sistema", async () => {
+        const res = await request(app).post("/usuario/10/pedidos");
+
+        expect(res.status).toBe(404);
+    });
+})
