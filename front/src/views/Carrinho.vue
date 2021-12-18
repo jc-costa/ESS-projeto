@@ -18,7 +18,7 @@
                       <h2 class="ma-0">Valor total:</h2>
                     </v-row>
                     <v-row>
-                      <h4 class="ml-10" style="font-weight:normal">R$ YY,YY</h4>
+                      <h4 class="ml-10" style="font-weight:normal">{{valorTotal()}}</h4>
                     </v-row>
                   </v-col>
                   <v-col cols="2" class="d-flex align-end justify-center">
@@ -146,6 +146,11 @@ export default {
       if (Math.random() >= 0.3) {
         this.statusPedido.pagamento = true
       }
+    },
+
+    valorTotal () {
+      const itens = this.carrinho.itens
+      return itens.reduce((sum, a) => sum + parseFloat(a.valor), 0).toFixed(2)
     }
   },
 
