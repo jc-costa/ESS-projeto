@@ -21,7 +21,7 @@
             <v-icon>mdi-dots-vertical</v-icon>
           </v-btn>
         </template>
-        <v-btn>
+        <v-btn @click="logout()">
           <v-icon>mdi-logout</v-icon>
           <span>Sair</span>
         </v-btn>
@@ -67,10 +67,14 @@ export default {
         console.log(e)
         // alert(e)
       }
+    },
+    logout () {
+      this.$store.dispatch('logout')
+      this.$router.push('/')
     }
   },
   beforeMount () {
-    this.getUser()
+    // this.getUser()
   }
 }
 </script>

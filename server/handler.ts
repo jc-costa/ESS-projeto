@@ -239,6 +239,8 @@ app.put('/usuario/:id/pedidos/:idPedido/cancelar', function (req, res) {
 })
 
 app.get('/usuario/:id', function(req, res) {
+
+    console.log('aaaaa')
     const id: number = +req.params.id;
     const usuario = usuarios.find(u => u.id == id);
 
@@ -246,6 +248,17 @@ app.get('/usuario/:id', function(req, res) {
         return res.status(200).json({data: usuario.pegarNome()});
     } else {
         return res.status(404).json({error: "Usuário não encontrado"});
+    }
+})
+
+app.get('/login', function(req, res) {
+    
+    const nome = req.query.nome;
+    const usuario = usuarios.find(u => u.pegarNome() == nome);
+    if (usuario) {
+        return res.status(200).json({data: usuario.id});
+    } else {
+        return res.status(404).json({error: "Usuário não encontrado", "user": nome});
     }
 })
 

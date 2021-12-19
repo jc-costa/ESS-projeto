@@ -1,5 +1,13 @@
 <template>
-    <div class="ma-0 pa-0">
+  <div>
+    <v-container v-if="!temPedido" class="d-flex flex-column grow">
+      <v-col>
+        <v-row align="center" justify="center" style="height: calc(100vh - 100px) !important">
+          <h2>Não existem pedidos realizados!</h2>
+        </v-row>
+      </v-col>
+    </v-container>
+    <div v-else>
       <v-row
         class="ma-0"
         no-gutters
@@ -7,10 +15,7 @@
         justify="center"
         v-for="(pedido, index) in this.pedidos" :key="index"
       >
-        <v-col lg=8>
-          <v-row
-            no-gutters
-          >
+        <v-col lg=10>
             <v-card id="pedido" class="mt-3 rounded-xl">
               <v-card-title>
                 <span>Pedido #{{pedido.id}} </span>
@@ -30,16 +35,13 @@
                 </div>
               </v-card-text>
             </v-card>
-          </v-row>
         </v-col>
       </v-row>
       <template>
         <!-- <v-btn @click="showDialog = true">Show Dialog</v-btn> -->
-        <v-row justify="space-around">
-          <v-col cols="auto">
             <v-dialog
               overflow="hidden"
-              v-if="showDialog" v-model="showDialog"
+              v-model="showDialog"
               transition="dialog-top-transition"
               max-width="600"
             >
@@ -54,7 +56,7 @@
                   <v-card-text>
                     <div v-if="checkPedidoConfirmado()" class="text-center text-h2 pa-12">Pedido confirmado!</div>
                     <div v-if="checkPedidoConfirmado()" class="text-center text-h5 pa-12">Seu pedido está com o restaurante e
-já esta sendo preparado!</div>
+  já esta sendo preparado!</div>
                     <div v-if="!checkPedidoConfirmado()" class="text-center text-h2 pa-12">Pedido Negado!</div>
                   </v-card-text>
                   <v-card-actions class="justify-end">
@@ -66,10 +68,9 @@ já esta sendo preparado!</div>
                 </v-card>
               </template>
             </v-dialog>
-          </v-col>
-        </v-row>
       </template>
     </div>
+  </div>
 </template>
 
 <script>
@@ -103,13 +104,19 @@ export default {
       await axios.get(`http://localhost:3000/usuario/${userId}/pedidos`)
         .then(resp => {
           this.pedidos = resp.data.data
-          this.$store.dispatch('assignPedidos', resp.data)
-          console.log(this.$store.state.pedidos)
+          console.log(this.pedidos)
+          if (this.pedidos.length > 0) {
+            this.$store.dispatch('assignPedidos', resp.data)
+            // console.log(this.$store.state.pedidos)
 
-          const pedido = this.pedidos.slice(-1)[0]
-          if (pedido.status === 2 && this.checkNovoPedido()) {
-            this.showDialog = true
-            this.$store.dispatch('atualizaUltimoPedido', pedido.id)
+            const pedido = this.pedidos.slice(-1)[0]
+            console.log(pedido)
+            console.log(this.checkNovoPedido())
+            if (pedido.status === 2 && this.checkNovoPedido()) {
+              console.log('Atulizar status pedido')
+              this.showDialog = true
+              this.$store.dispatch('atualizaUltimoPedido', pedido.id)
+            }
           }
         })
         .catch(e => { console.log(e) })
@@ -117,7 +124,9 @@ export default {
   },
 
   computed: {
-
+    temPedido () {
+      return this.pedidos.length > 0
+    }
   },
 
   beforeMount () {

@@ -16,11 +16,11 @@
         <v-row v-if="!carrinhoVazio" no-gutters justify="center" class="align-end shrink">
           <v-col lg="10">
             <v-card style="height: 90px" class="rounded-xl">
-              <v-card-text class="rounded-xl">
+              <v-card-text>
                 <v-row no-gutters>
                   <v-col cols="10">
                     <v-row no-gutters>
-                      <h2 class="ma-0">Valor total:</h2>
+                      <h2 class="ma-0 pl-2">Valor total:</h2>
                     </v-row>
                     <v-row>
                       <h3 class="ml-10" style="font-weight:normal">R$ {{this.carrinho.data.precoTotal.toFixed(2)}}</h3>
@@ -126,7 +126,7 @@ export default {
     goToPedidos () {
       if (this.pedido !== null) {
         if (this.pedido.status !== 0) {
-          this.$router.push('/pedidos')
+          this.$router.push('/')
         } else {
           this.dialogPagamento = false
         }
@@ -143,7 +143,11 @@ export default {
           this.carrinho = resp.data
           this.loading = false
         })
-        .catch(e => { console.log(e) })
+        .catch(e => {
+          this.carrinho = null
+          this.loading = false
+          console.log(e)
+        })
     },
 
     async fazerPedido () {
