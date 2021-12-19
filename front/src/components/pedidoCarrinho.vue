@@ -42,8 +42,9 @@
                       v-for="(item, index) in dropdown"
                       :key="index"
                       link
+                      @click="action(item, pedido)"
                     >
-                      <v-list-item-title @click="test()">{{ item.title }}</v-list-item-title>
+                      <v-list-item-title>{{ item.title }}</v-list-item-title>
                     </v-list-item>
                   </v-list>
                 </v-menu>
@@ -95,7 +96,9 @@
               <v-icon>mdi-chevron-down</v-icon>
             </v-btn>
           </v-col>
-          <v-col></v-col>
+        </v-row>
+        <v-row>
+          <span class="ml-3" style="color: black; font-size: 1rem">Valor total: R$ {{editPedido.preco * editPedido.quantidade}}</span>
         </v-row>
       </v-card-text>
       <v-card-actions>
@@ -128,8 +131,8 @@ export default {
     }
   },
   created () {
-    console.log('Prop received')
-    console.log(this.carrinho.data)
+    // console.log('Prop received')
+    // console.log(this.carrinho.data)
   },
   computed: {
     // carrinho () {
@@ -153,7 +156,8 @@ export default {
       }
     },
     editarPedido (pedido) {
-      console.log(pedido.id + ' Pedido editado')
+      console.log('Pedido editado')
+      console.log(pedido.preco)
       this.editPedido = pedido
       this.editDialog = true
     },
@@ -175,6 +179,10 @@ export default {
     },
     diminuiQuantidade () {
       if (this.editPedido.quantidade > 1) { this.editPedido.quantidade = this.editPedido.quantidade - 1 }
+    },
+    salvaPedidoEditado () {
+      this.$emit('atualiza-pedido', this.editPedido)
+      this.editDialog = false
     }
 
   }

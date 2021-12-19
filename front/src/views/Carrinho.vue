@@ -10,6 +10,7 @@
             <Pedido
               :carrinho="this.carrinho"
               @remove-pedido="removeItem($event)"
+              @atualiza-pedido="atualizaPedido($event)"
               />
           </v-row>
         </v-row>
@@ -193,6 +194,18 @@ export default {
           this.carrinho = resp.data
         })
         .catch(e => { console.log(e) })
+    },
+    async atualizaPedido (pedido) {
+      console.log(pedido)
+      await axios.put(`http://localhost:3000/usuario/${this.userId}/carrinho`, pedido)
+        .then(resp => {
+          console.log('Pedido atualizado')
+          console.log(resp.data)
+          this.carrinho = resp.data
+        })
+        .catch(e => {
+          console.log(e)
+        })
     }
   },
 

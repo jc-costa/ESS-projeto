@@ -230,7 +230,6 @@ app.put('/usuario/:id/pedidos/:idPedido/cancelar', function (req, res) {
 
 app.get('/usuario/:id', function(req, res) {
 
-    console.log('aaaaa')
     const id: number = +req.params.id;
     const usuario = usuarios.find(u => u.id == id);
 
