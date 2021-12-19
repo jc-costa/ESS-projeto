@@ -1,59 +1,55 @@
 <template>
   <v-container fluid class="ma-0 pa-0">
     <div v-for="(pedido, index) in this.carrinho.data.itens" :key="index">
-      <v-row align="center" justify="center">
-        <v-col lg="10">
-          <v-card class="mt-5 rounded-xl">
-            <v-card-text>
-              <v-row no-gutters>
-                <v-col cols="10">
+      <v-card class="mt-5">
+        <v-card-text>
+          <v-row no-gutters>
+            <v-col cols="10">
+              <v-row>
+                <h2 class="pa-2">{{ pedido.descricao }}</h2>
+              </v-row>
+              <v-row v-if="pedido.detalhes">
+                <v-col>
                   <v-row>
-                    <h2 class="pa-2">{{ pedido.descricao }}</h2>
-                  </v-row>
-                  <v-row v-if="pedido.detalhes">
-                    <v-col>
-                      <v-row>
-                        <h3>Notas do cliente: </h3>
-                      </v-row>
-                      <v-row>
-                        <h3 class="detalhes">- {{pedido.detalhes}}</h3>
-                      </v-row>
-                    </v-col>
+                    <h3>Notas do cliente: </h3>
                   </v-row>
                   <v-row>
-                    <h3>Quantidade: <v-btn v-if="show">+</v-btn> {{pedido.quantidade}} <v-btn v-if="show">-</v-btn></h3>
+                    <span id="detalhe">- {{pedido.detalhes}}</span>
                   </v-row>
-                  <v-row>
-                    <h3 class="last">Valor: R$ {{pedido.preco * pedido.quantidade}}</h3>
-                  </v-row>
-                </v-col>
-                <v-col cols="2" class="d-flex justify-end">
-                  <v-menu offset-y left>
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-btn
-                        v-bind="attrs"
-                        v-on="on"
-                        icon
-                      >
-                        <v-icon>mdi-chevron-down</v-icon>
-                      </v-btn>
-                    </template>
-                    <v-list>
-                      <v-list-item
-                        v-for="(item, index) in dropdown"
-                        :key="index"
-                        link
-                      >
-                        <v-list-item-title @click="action(item, pedido)">{{ item.title }}</v-list-item-title>
-                      </v-list-item>
-                    </v-list>
-                  </v-menu>
                 </v-col>
               </v-row>
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
+              <v-row>
+                <h3>Quantidade: {{pedido.quantidade}}</h3>
+              </v-row>
+              <v-row>
+                <h3 class="last">Valor: R$ {{pedido.preco * pedido.quantidade}}</h3>
+              </v-row>
+            </v-col>
+            <v-col class="d-flex justify-end">
+              <v-menu offset-y left>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    v-bind="attrs"
+                    v-on="on"
+                    icon
+                  >
+                    <v-icon>mdi-chevron-down</v-icon>
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-item
+                    v-for="(item, index) in dropdown"
+                    :key="index"
+                    link
+                  >
+                    <v-list-item-title @click="action(item, pedido)">{{ item.title }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
     </div>
     <v-dialog
       v-model="dialog"
@@ -69,11 +65,49 @@
     </v-card>
     </v-dialog>
 
+    <v-dialog
+      v-model="editDialog"
+      max-width="600"
+    >
+    <v-card>
+      <v-card-title>Editando o pedido</v-card-title>
+      <v-card-text>
+        <v-row>
+          <v-col>
+            <v-row>
+              <span class="ml-3 mt-3" style="font-size: 1.1rem; color:black">Notas do cliente</span>
+            </v-row>
+            <v-row>
+              <v-textarea class="ml-3 mr-3" auto-grow v-model="editPedido.detalhes"></v-textarea>
+            </v-row>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <span class="mr-1" style="color: black; font-size: 1rem">Quantidade</span>
+            <v-btn icon class="mr-1" @click="aumentaQuantidade()">
+              <v-icon>mdi-chevron-up</v-icon>
+            </v-btn>
+              {{this.editPedido.quantidade}}
+            <v-btn icon class="ml-1" @click="diminuiQuantidade()">
+              <v-icon>mdi-chevron-down</v-icon>
+            </v-btn>
+          </v-col>
+          <v-col></v-col>
+        </v-row>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn plain @click="closeDialog()">Cancelar</v-btn>
+        <v-spacer></v-spacer>
+        <v-btn color="success" plain @click="salvaPedidoEditado()">Confirmar</v-btn>
+      </v-card-actions>
+    </v-card>
+    </v-dialog>
+
   </v-container>
 </template>
 
 <script>
-
 export default {
   name: 'Pedidos',
   props: ['carrinho'],
@@ -84,13 +118,22 @@ export default {
         { title: 'Cancelar Pedido' }
       ],
       dialog: false,
-      idPedido: null,
       editDialog: false,
-      editPedido: '',
-      show: false
+      idPedido: null,
+      loading: true,
+      detalhe: '',
+      editPedido: ''
     }
   },
+  created () {
+    console.log('Prop received')
+    console.log(this.carrinho.data)
+  },
   computed: {
+    // carrinho () {
+    //   // console.log(this.$store.state.carrinho)
+    //   return this.$store.state.carrinho
+    // }
   },
   methods: {
     action (item, pedido) {
@@ -112,6 +155,7 @@ export default {
     cancelarPedido () {
       console.log(this.idPedido + ' Pedido Cancelado')
       this.$emit('remove-pedido', this.idPedido)
+      // this.$store.dispatch('removePedidoCarrinho', this.idPedido)
       this.closeDialog()
     },
     showDialog () {
@@ -133,6 +177,11 @@ export default {
 </script>
 
 <style scoped>
+
+#detalhe {
+  margin-left: 70px;
+}
+
 h3 {
   font-weight: normal;
   margin-left: 40px;
@@ -141,10 +190,6 @@ h3 {
 
 h3.last{
   margin-bottom: 20px;
-}
-
-h3.detalhes {
-  margin-left:70px;
 }
 
 </style>
