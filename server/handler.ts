@@ -49,7 +49,7 @@ var itens = [
         restaurante: restaurantes[0]
     }),
     new ItemCarrinho(<ItemCarrinho> {
-        id: 1,
+        id: 2,
         descricao: "Coca-Cola",
         preco: 10,
         quantidade: 1,
@@ -59,7 +59,31 @@ var itens = [
 ]
 var usuarios = [
     new Usuario(1, "Breno Miranda", new Carrinho(restaurantes[0], itens)),
-    new Usuario(2, "Paulo Borba", undefined, [new Pedido(<Pedido> {id: 1, itens: [itens[0]], valorTotal: 40, status: StatusPedido.COMPLETO, restaurante: restaurantes[0]})])
+    new Usuario(2, "Paulo Borba", 
+        undefined, 
+        [   
+            new Pedido(
+                <Pedido> 
+                    {
+                        id: 1, 
+                        itens: [itens[0], itens[1]], 
+                        valorTotal: 50, 
+                        status: StatusPedido.COMPLETO,
+                        data: new Date(), 
+                        restaurante: restaurantes[0]
+                    }
+            ),
+            new Pedido(
+                <Pedido> 
+                    {
+                        id: 2, 
+                        itens: [itens[1]], 
+                        valorTotal: 50, 
+                        status: StatusPedido.COMPLETO, 
+                        restaurante: restaurantes[0]
+                    }
+            )
+        ])
 ]
 
 /*

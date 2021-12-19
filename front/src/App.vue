@@ -9,7 +9,7 @@
       <span>Nome App</span>
       <v-spacer></v-spacer>
       <span>Nome Usuario</span>
-      <v-btn icon class="ml-3" @click="goToView('Carrinho')">
+      <v-btn icon class="ml-3" data-cy="btn-carrinho" @click="goToView('Carrinho')">
         <v-icon>mdi-cart</v-icon>
       </v-btn>
       <v-btn icon class="ml-3" @click="goToView('Pedidos')">
