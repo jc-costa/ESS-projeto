@@ -51,7 +51,7 @@ export default new Vuex.Store({
       commit('updateUser', payload)
     },
     logout ({ commit }) {
-
+      commit('clear')
     }
   },
   modules: {
