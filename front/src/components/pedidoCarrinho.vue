@@ -1,55 +1,59 @@
 <template>
   <v-container fluid class="ma-0 pa-0">
     <div v-for="(pedido, index) in this.carrinho.data.itens" :key="index">
-      <v-card class="mt-5">
-        <v-card-text>
-          <v-row no-gutters>
-            <v-col cols="10">
-              <v-row>
-                <h2 class="pa-2">{{ pedido.descricao }}</h2>
-              </v-row>
-              <v-row v-if="pedido.detalhes">
-                <v-col>
+      <v-row align="center" justify="center">
+        <v-col lg="10">
+          <v-card class="mt-5 rounded-xl">
+            <v-card-text>
+              <v-row no-gutters>
+                <v-col cols="10">
                   <v-row>
-                    <h3>Notas do cliente: </h3>
+                    <h2 class="pa-2">{{ pedido.descricao }}</h2>
+                  </v-row>
+                  <v-row v-if="pedido.detalhes">
+                    <v-col>
+                      <v-row>
+                        <h3>Notas do cliente: </h3>
+                      </v-row>
+                      <v-row>
+                        <h3 class="detalhes">- {{pedido.detalhes}}</h3>
+                      </v-row>
+                    </v-col>
                   </v-row>
                   <v-row>
-                    <span id="detalhe">- {{pedido.detalhes}}</span>
+                    <h3>Quantidade: <v-btn v-if="show">+</v-btn> {{pedido.quantidade}} <v-btn v-if="show">-</v-btn></h3>
+                  </v-row>
+                  <v-row>
+                    <h3 class="last">Valor: R$ {{pedido.preco * pedido.quantidade}}</h3>
                   </v-row>
                 </v-col>
+                <v-col cols="2" class="d-flex justify-end">
+                  <v-menu offset-y left>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        v-bind="attrs"
+                        v-on="on"
+                        icon
+                      >
+                        <v-icon>mdi-chevron-down</v-icon>
+                      </v-btn>
+                    </template>
+                    <v-list>
+                      <v-list-item
+                        v-for="(item, index) in dropdown"
+                        :key="index"
+                        link
+                      >
+                        <v-list-item-title @click="action(item, pedido)">{{ item.title }}</v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+                </v-col>
               </v-row>
-              <v-row>
-                <h3>Quantidade: {{pedido.quantidade}}</h3>
-              </v-row>
-              <v-row>
-                <h3 class="last">Valor: R$ {{(pedido.preco * pedido.quantidade).toFixed(2)}}</h3>
-              </v-row>
-            </v-col>
-            <v-col class="d-flex justify-end">
-              <v-menu offset-y left>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    v-bind="attrs"
-                    v-on="on"
-                    icon
-                  >
-                    <v-icon>mdi-chevron-down</v-icon>
-                  </v-btn>
-                </template>
-                <v-list>
-                  <v-list-item
-                    v-for="(item, index) in dropdown"
-                    :key="index"
-                    link
-                  >
-                    <v-list-item-title @click="action(item, pedido)">{{ item.title }}</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </v-col>
-          </v-row>
-        </v-card-text>
-      </v-card>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
     </div>
     <v-dialog
       v-model="dialog"
@@ -80,21 +84,13 @@ export default {
         { title: 'Cancelar Pedido' }
       ],
       dialog: false,
-      editDialog: false,
       idPedido: null,
-      loading: true,
-      detalhe: '',
-      editPedido: ''
+      editDialog: false,
+      editPedido: '',
+      show: false
     }
   },
-  created () {
-    // this.addData()
-  },
   computed: {
-    // carrinho () {
-    //   // console.log(this.$store.state.carrinho)
-    //   return this.$store.state.carrinho
-    // }
   },
   methods: {
     action (item, pedido) {
@@ -110,11 +106,12 @@ export default {
     },
     editarPedido (pedido) {
       console.log(pedido.id + ' Pedido editado')
+      this.editPedido = pedido
+      this.editDialog = true
     },
     cancelarPedido () {
       console.log(this.idPedido + ' Pedido Cancelado')
       this.$emit('remove-pedido', this.idPedido)
-      // this.$store.dispatch('removePedidoCarrinho', this.idPedido)
       this.closeDialog()
     },
     showDialog () {
@@ -122,6 +119,13 @@ export default {
     },
     closeDialog () {
       this.dialog = false
+      this.editDialog = false
+    },
+    aumentaQuantidade () {
+      this.editPedido.quantidade = this.editPedido.quantidade + 1
+    },
+    diminuiQuantidade () {
+      if (this.editPedido.quantidade > 1) { this.editPedido.quantidade = this.editPedido.quantidade - 1 }
     }
 
   }
@@ -129,11 +133,6 @@ export default {
 </script>
 
 <style scoped>
-
-#detalhe {
-  margin-left: 70px;
-}
-
 h3 {
   font-weight: normal;
   margin-left: 40px;
@@ -142,6 +141,10 @@ h3 {
 
 h3.last{
   margin-bottom: 20px;
+}
+
+h3.detalhes {
+  margin-left:70px;
 }
 
 </style>

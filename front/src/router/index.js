@@ -26,18 +26,13 @@ const routes = [
   },
   {
     path: '/detalhe/:id',
-    name: 'Detalhe Pedido',
+    name: 'DetalhePedido',
     component: DetalhesPedidos
   },
   {
     path: '/carrinho',
-    name: 'Carrinho de Compras',
+    name: 'CarrinhoCompras',
     component: Carrinho
-  },
-  {
-    path: '/test',
-    name: 'Teste',
-    component: Test
   }
 ]
 
@@ -45,6 +40,12 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeResolve((to, from, next) => {
+  if (to.path !== from.path) {
+    next()
+  }
 })
 
 export default router

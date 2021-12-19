@@ -124,10 +124,12 @@ export default {
 
   methods: {
     goToPedidos () {
-      if (this.pedido.status !== 0) {
-        this.$router.push('/pedidos')
-      } else {
-        this.dialogPagamento = false
+      if (this.pedido !== null) {
+        if (this.pedido.status !== 0) {
+          this.$router.push('/pedidos')
+        } else {
+          this.dialogPagamento = false
+        }
       }
     },
 
@@ -139,8 +141,8 @@ export default {
       try {
         await axios.get('http://localhost:3000/usuario/2/carrinho')
           .then(resp => {
-            console.log('Data received (carrinho)')
-            console.log(resp.data)
+            // console.log('Data received')
+            // console.log(resp.data)
             this.carrinho = resp.data
             this.loading = false
           })
@@ -221,7 +223,7 @@ export default {
 
   computed: {
     carrinhoVazio () {
-      return this.carrinho.data.itens.length === 0
+      return this.carrinho === null
     }
   },
 

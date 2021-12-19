@@ -58,8 +58,6 @@ export default {
       console.log(this.pedidos.data)
       this.pedidos.data.forEach(pedido => {
         if (this.id === pedido.id.toString()) {
-          // console.log(pedido)
-          // console.log(new Date(pedido.data).toLocaleDateString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }))
           this.date = new Date(pedido.data).toLocaleString('pt-BR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
           this.nomeRestaurante = pedido.restaurante.nome
           this.valor = pedido.valorTotal
