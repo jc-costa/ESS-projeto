@@ -32,7 +32,7 @@
                         <v-btn
                           color="deep-purple accent-4"
                           class="white--text"
-                          @click="overlay = !overlay"
+                          @click="overlay = !overlay; fazerPedido()"
                         >
                           Confirmar
                           <v-icon right>
@@ -58,14 +58,14 @@
                               <template>
                                 <v-card style="overflow: hidden">
                                   <v-row justify="center">
-                                    <v-icon v-if="statusPedido.pagamento" size="200" color="green">mdi-check-bold</v-icon>
+                                    <v-icon v-if="pedido.status" size="200" color="green">mdi-check-bold</v-icon>
                                   </v-row>
                                   <v-row justify="center">
-                                    <v-icon v-if="!statusPedido.pagamento" size="200" color="red">mdi-alert-circle-outline</v-icon>
+                                    <v-icon v-if="!pedido.status" size="200" color="red">mdi-alert-circle-outline</v-icon>
                                   </v-row>
                                   <v-card-text>
-                                    <div v-if="statusPedido.pagamento" class="text-center text-h2 pa-12">Pagamento confirmado!</div>
-                                    <div v-if="!statusPedido.pagamento" class="text-center text-h2 pa-12">Pagamento Negado!</div>
+                                    <div v-if="pedido.status" class="text-center text-h2 pa-12">Pagamento confirmado!</div>
+                                    <div v-if="!pedido.status" class="text-center text-h2 pa-12">Pagamento Negado!</div>
                                   </v-card-text>
                                   <v-card-actions class="justify-end">
                                     <v-btn
@@ -92,9 +92,9 @@
           </v-snackbar>
         </template>
   </v-container>
-  <!-- <v-btn @click="addItem()">
+  <v-btn @click="addItem()">
     add
-  </v-btn> -->
+  </v-btn>
 </v-app>
 </template>
 
@@ -109,6 +109,7 @@ export default {
       // carrinho: this.$store.state.carrinho,
       loading: true,
       carrinho: null,
+      pedido: null,
       overlay: false,
       statusPedido: this.$store.state.statusPedido,
       dialogPagamento: false,
@@ -120,38 +121,20 @@ export default {
     }
   },
 
-  watch: {
-    overlay (val) {
-      this.tentaPagar()
-      setTimeout(() => {
-        this.dialogPagamento = true
-      }, 950)
-      val &&
-      setTimeout(() => {
-        this.overlay = false
-      }, 1000)
-    }
-  },
-
   methods: {
     goToPedidos () {
-      if (this.statusPedido.pagamento) {
+      if (this.pedido.status !== 0) {
         this.$router.push('/pedidos')
       } else {
         this.dialogPagamento = false
       }
     },
 
-    tentaPagar () {
-      if (Math.random() >= 0.2) {
-        this.statusPedido.pagamento = true
-      }
-    },
     async getCarrinho () {
       try {
         await axios.get('http://localhost:3000/usuario/1/carrinho')
           .then(resp => {
-            console.log('Data received')
+            console.log('Data received (carrinho)')
             console.log(resp.data)
             this.carrinho = resp.data
             this.loading = false
@@ -164,16 +147,38 @@ export default {
       }
     },
 
+    async fazerPedido () {
+      try {
+        await axios.post('http://localhost:3000/usuario/1/pedidos')
+          .then(resp => {
+            console.log('Data received (pedido)')
+            console.log(resp.data)
+            this.pedido = resp.data.data.slice(-1)[0]
+            console.log(this.pedido)
+            setTimeout(() => {
+              this.overlay = false
+              this.dialogPagamento = true
+            }, 500)
+          })
+        // const data = req.data
+        // console.log(data)
+      } catch (e) {
+        console.log(e)
+        // alert(e)
+      }
+    },
+
     async addItem () {
       try {
         await axios.post('http://localhost:3000/usuario/1/carrinho', {
-          id: 1234,
-          descricao: 'pizza',
-          preco: 22.10,
-          detalhes: 'sem cebola',
+          id: 1,
+          restaurante: {
+            id: 1,
+            nome: 'Pizza Hut'
+          },
           quantidade: 2
         }).then(resp => {
-          console.log('Data received')
+          console.log('Data received (carrinho)')
           console.log(resp.data)
           this.carrinho = resp.data
           this.loading = false
@@ -216,7 +221,6 @@ export default {
   },
 
   created () {
-    this.statusPedido.pagamento = false
     this.getCarrinho()
   }
 

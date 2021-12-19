@@ -49,14 +49,16 @@
               <template>
                 <v-card style="overflow: hidden">
                   <v-row justify="center">
-                    <v-icon v-if="statusPedido.confirmado" size="200" color="green">mdi-check-bold</v-icon>
+                    <v-icon v-if="pedido.status === 2" size="200" color="green">mdi-check-bold</v-icon>
                   </v-row>
                   <v-row justify="center">
-                    <v-icon v-if="!statusPedido.confirmado" size="200" color="red">mdi-alert-circle-outline</v-icon>
+                    <v-icon v-if="!pedido.status === 2" size="200" color="red">mdi-alert-circle-outline</v-icon>
                   </v-row>
                   <v-card-text>
-                    <div v-if="statusPedido.confirmado" class="text-center text-h2 pa-12">Pedido confirmado!</div>
-                    <div v-if="!statusPedido.confirmado" class="text-center text-h2 pa-12">Pedido Negado!</div>
+                    <div v-if="pedido.status === 2" class="text-center text-h2 pa-12">Pedido confirmado!</div>
+                    <div v-if="pedido.status === 2" class="text-center text-h5 pa-12">Seu pedido está com o restaurante e
+já esta sendo preparado!</div>
+                    <div v-if="!pedido.status === 2" class="text-center text-h2 pa-12">Pedido Negado!</div>
                   </v-card-text>
                   <v-card-actions class="justify-end">
                     <v-btn
@@ -81,9 +83,9 @@ export default {
     return {
       // data -> Todos os pedidos dessa data
       pedidos: this.$store.state.pedidos,
-      statusPedido: this.$store.state.statusPedido,
-      showDialog: false
-
+      showDialog: false,
+      pedido: null,
+      timer: null
     }
   },
   methods: {
@@ -91,47 +93,16 @@ export default {
       this.$router.push(`/detalhe/${id}`)
     },
 
-    limpaCarrinho () {
-      this.carrinho.data.itens.map((item) => {
-        console.log(item.id)
-        this.removeItem(item.id)
-      })
-    },
-
-    pedidoAceito () {
-      if (Math.random() >= 0.3) {
-        this.statusPedido.confirmado = true
-        this.limpaCarrinho()
-      }
-      this.showDialog = true
-    },
-
-    async getCarrinho () {
+    async getUltimoPedido () {
       try {
-        await axios.get('http://localhost:3000/usuario/1/carrinho')
+        await axios.get('http://localhost:3000/usuario/1/pedidos')
           .then(resp => {
-            console.log('Data received')
+            console.log('Data received (carrinho)')
             console.log(resp.data)
-            this.carrinho = resp.data
-            this.loading = false
-          })
-        // const data = req.data
-        // console.log(data)
-      } catch (e) {
-        console.log(e)
-        // alert(e)
-      }
-    },
-
-    async removeItem (id) {
-      try {
-        console.log('Removing item')
-        await axios.delete(`http://localhost:3000/usuario/1/carrinho/${id}`)
-          .then(resp => {
-            console.log('Pedido excluido')
-            console.log(resp.data)
-            this.carrinho = resp.data
-            // this.loading = false
+            this.pedido = resp.data.data.slice(-1)[0]
+            if (this.pedido.status === 2) {
+              this.showDialog = true
+            }
           })
         // const data = req.data
         // console.log(data)
@@ -142,16 +113,8 @@ export default {
     }
   },
 
-  beforeMount () {
-    this.getCarrinho()
-    this.statusPedido.confirmado = false
-    console.log(this.$router.history._startLocation)
-    if (this.$router.history._startLocation === '/carrinho' && this.statusPedido.pagamento === true) {
-      setTimeout(() => {
-        this.pedidoAceito()
-      }, 1500)
-      console.log(this.showDialog)
-    }
+  mounted: function () {
+    this.getUltimoPedido()
   }
 }
 </script>
