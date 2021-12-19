@@ -4,10 +4,10 @@
       <v-col>
         <v-row>Usuário</v-row>
         <v-row>
-          <v-text-field v-model="username"></v-text-field>
+          <v-text-field data-cy="nome-usuario" v-model="username"></v-text-field>
         </v-row>
         <v-row>
-          <v-btn @click="login()">Confirmar</v-btn>
+          <v-btn data-cy="btn-confirmar-login" @click="login()">Confirmar</v-btn>
         </v-row>
       </v-col>
     </v-row>
