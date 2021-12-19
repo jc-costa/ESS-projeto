@@ -37,7 +37,7 @@ export class Pedido extends Observavel implements Observador {
         this.status = pedido.status;
         this.restaurante = pedido.restaurante;
         
-        ServicoPagamento.getInstance().pagarPedido(this)
+        // ServicoPagamento.getInstance().pagarPedido(this)
     }
 
     pegarInformacao() {

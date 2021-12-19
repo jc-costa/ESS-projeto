@@ -195,6 +195,7 @@ export default {
         })
         .catch(e => { console.log(e) })
     },
+
     async atualizaPedido (pedido) {
       console.log(pedido)
       await axios.put(`http://localhost:3000/usuario/${this.userId}/carrinho`, pedido)
