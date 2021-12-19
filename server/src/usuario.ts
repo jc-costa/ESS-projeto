@@ -43,6 +43,7 @@ export class Usuario {
         });
         pedido.adicionarObservador(this);
         this.pedidos.push(pedido);
+        this.carrinho = new Carrinho();
     }
 
     notificarMudanca(pedido: Pedido) {

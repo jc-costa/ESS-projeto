@@ -26,6 +26,18 @@ export default new Vuex.Store({
     },
     updateUser (state, payload) {
       state.user = payload
+      console.log(state.user)
+    },
+    clear (state) {
+      state.pedidos = null
+      state.carrinho = null
+      state.ultimoPedido = {
+        id: null
+      }
+      state.user = {
+        id: null,
+        name: null
+      }
     }
   },
   actions: {
@@ -37,6 +49,9 @@ export default new Vuex.Store({
     },
     atualizaUser ({ commit }, payload) {
       commit('updateUser', payload)
+    },
+    logout ({ commit }) {
+
     }
   },
   modules: {

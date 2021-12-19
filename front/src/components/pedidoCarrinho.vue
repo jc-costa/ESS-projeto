@@ -1,56 +1,58 @@
 <template>
   <v-container fluid class="ma-0 pa-0">
-    <div v-for="(pedido, index) in this.carrinho.data.itens" :key="index">
-      <v-card class="mt-5">
-        <v-card-text>
-          <v-row no-gutters>
-            <v-col cols="10">
-              <v-row>
-                <h2 class="pa-2">{{ pedido.descricao }}</h2>
-              </v-row>
-              <v-row v-if="pedido.detalhes">
-                <v-col>
-                  <v-row>
-                    <h3>Notas do cliente: </h3>
-                  </v-row>
-                  <v-row>
-                    <span id="detalhe">- {{pedido.detalhes}}</span>
-                  </v-row>
-                </v-col>
-              </v-row>
-              <v-row>
-                <h3>Quantidade: {{pedido.quantidade}}</h3>
-              </v-row>
-              <v-row>
-                <h3 class="last">Valor: R$ {{pedido.preco * pedido.quantidade}}</h3>
-              </v-row>
-            </v-col>
-            <v-col class="d-flex justify-end">
-              <v-menu offset-y left>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    v-bind="attrs"
-                    v-on="on"
-                    icon
-                  >
-                    <v-icon>mdi-chevron-down</v-icon>
-                  </v-btn>
-                </template>
-                <v-list>
-                  <v-list-item
-                    v-for="(item, index) in dropdown"
-                    :key="index"
-                    link
-                  >
-                    <v-list-item-title @click="action(item, pedido)">{{ item.title }}</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </v-col>
-          </v-row>
-        </v-card-text>
-      </v-card>
-    </div>
+    <v-row align="center" justify="center">
+      <v-col lg=10 sm=10 xs=10 v-for="(pedido, index) in this.carrinho.data.itens" :key="index">
+        <v-card class="mt-5 rounded-xl">
+          <v-card-text>
+            <v-row no-gutters>
+              <v-col cols="10">
+                <v-row>
+                  <h2 class="pt-4 pl-4">{{ pedido.descricao }}</h2>
+                </v-row>
+                <v-row v-if="pedido.detalhes">
+                  <v-col>
+                    <v-row>
+                      <h3>Notas do cliente: </h3>
+                    </v-row>
+                    <v-row>
+                      <span id="detalhe">- {{pedido.detalhes}}</span>
+                    </v-row>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <h3>Quantidade: {{pedido.quantidade}}</h3>
+                </v-row>
+                <v-row>
+                  <h3 class="last">Valor: R$ {{pedido.preco * pedido.quantidade}}</h3>
+                </v-row>
+              </v-col>
+              <v-col class="d-flex justify-end">
+                <v-menu offset-y left>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      v-bind="attrs"
+                      v-on="on"
+                      icon
+                    >
+                      <v-icon>mdi-chevron-down</v-icon>
+                    </v-btn>
+                  </template>
+                  <v-list>
+                    <v-list-item
+                      v-for="(item, index) in dropdown"
+                      :key="index"
+                      link
+                    >
+                      <v-list-item-title @click="test()">{{ item.title }}</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
     <v-dialog
       v-model="dialog"
       max-width="350"
@@ -136,6 +138,9 @@ export default {
     // }
   },
   methods: {
+    test () {
+      console.log('clicado')
+    },
     action (item, pedido) {
       switch (item.title) {
         case 'Editar Pedido':
