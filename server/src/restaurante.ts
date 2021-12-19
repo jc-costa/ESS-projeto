@@ -11,7 +11,7 @@ export class Restaurante {
     tempoMedioDePreparo: number;
     comandas: Comanda[] = [];
 
-    testeDeAPI: boolean = false;
+    testeDeAPI: boolean = true;
     deveAceitar: boolean = true;
     deveFinalizar: boolean = false;
     deveCancelar: boolean = false;
