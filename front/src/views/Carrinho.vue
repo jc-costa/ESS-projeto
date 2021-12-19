@@ -23,7 +23,7 @@
                       <h2 class="ma-0">Valor total:</h2>
                     </v-row>
                     <v-row>
-                      <h3 class="ml-10" style="font-weight:normal">R$ {{this.carrinho.data.precoTotal}}</h3>
+                      <h3 class="ml-10" style="font-weight:normal">R$ {{this.carrinho.data.precoTotal.toFixed(2)}}</h3>
                     </v-row>
                   </v-col>
                   <v-col cols="2" class="d-flex align-end justify-center">
@@ -51,7 +51,7 @@
                           <v-col cols="auto">
                             <v-dialog
                               overflow="hidden"
-                              v-if="showDialog" v-model="showDialog"
+                              v-if="dialogPagamento" v-model="dialogPagamento"
                               transition="dialog-top-transition"
                               max-width="600"
                             >
@@ -92,6 +92,9 @@
           </v-snackbar>
         </template>
   </v-container>
+  <!-- <v-btn @click="addItem()">
+    add
+  </v-btn> -->
 </v-app>
 </template>
 
@@ -108,7 +111,7 @@ export default {
       carrinho: null,
       overlay: false,
       statusPedido: this.$store.state.statusPedido,
-      showDialog: false,
+      dialogPagamento: false,
       snackbar: {
         show: false,
         message: null,
@@ -120,20 +123,9 @@ export default {
   watch: {
     overlay (val) {
       this.tentaPagar()
-      if (this.carrinho.itens.length) {
-        setTimeout(() => {
-          this.showDialog = true
-        }, 950)
-      } else {
-        this.snackbar = {
-          message: 'O carrinho está vazio',
-          color: 'error',
-          show: true
-        }
-        setTimeout(() => {
-          this.snackbar.show = false
-        }, 2000)
-      }
+      setTimeout(() => {
+        this.dialogPagamento = true
+      }, 950)
       val &&
       setTimeout(() => {
         this.overlay = false
@@ -146,37 +138,15 @@ export default {
       if (this.statusPedido.pagamento) {
         this.$router.push('/pedidos')
       } else {
-        this.showDialog = false
+        this.dialogPagamento = false
       }
     },
 
     tentaPagar () {
-      if (Math.random() >= 0.3) {
+      if (Math.random() >= 0.2) {
         this.statusPedido.pagamento = true
       }
     },
-
-    valorTotal () {
-      const itens = this.carrinho.itens
-      return itens.reduce((sum, a) => sum + parseFloat(a.valor), 0).toFixed(2)
-    }
-  },
-
-  mounted () {
-    this.statusPedido.pagamento = false
-  },
-
-  components: {
-    Pedido
-  },
-
-  computed: {
-    carrinhoVazio () {
-      return this.carrinho.data.itens.length === 0
-    }
-  },
-
-  methods: {
     async getCarrinho () {
       try {
         await axios.get('http://localhost:3000/usuario/1/carrinho')
@@ -193,6 +163,29 @@ export default {
         // alert(e)
       }
     },
+
+    async addItem () {
+      try {
+        await axios.post('http://localhost:3000/usuario/1/carrinho', {
+          id: 1234,
+          descricao: 'pizza',
+          preco: 22.10,
+          detalhes: 'sem cebola',
+          quantidade: 2
+        }).then(resp => {
+          console.log('Data received')
+          console.log(resp.data)
+          this.carrinho = resp.data
+          this.loading = false
+        })
+        // const data = req.data
+        // console.log(data)
+      } catch (e) {
+        console.log(e)
+        // alert(e)
+      }
+    },
+
     async removeItem (id) {
       try {
         console.log('Removing item')
@@ -211,7 +204,19 @@ export default {
       }
     }
   },
+
+  components: {
+    Pedido
+  },
+
+  computed: {
+    carrinhoVazio () {
+      return this.carrinho.data.itens.length === 0
+    }
+  },
+
   created () {
+    this.statusPedido.pagamento = false
     this.getCarrinho()
   }
 

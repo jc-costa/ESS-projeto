@@ -74,6 +74,7 @@
 </template>
 
 <script>
+const axios = require('axios')
 export default {
   name: 'Pedidos',
   data () {
@@ -91,7 +92,10 @@ export default {
     },
 
     limpaCarrinho () {
-      this.$store.dispatch('limparCarrinho')
+      this.carrinho.data.itens.map((item) => {
+        console.log(item.id)
+        this.removeItem(item.id)
+      })
     },
 
     pedidoAceito () {
@@ -100,26 +104,54 @@ export default {
         this.limpaCarrinho()
       }
       this.showDialog = true
-    }
-  },
+    },
 
-  beforeRouteEnter (to, from, next) {
-    next((vm) => {
-      vm.from = from
-    })
+    async getCarrinho () {
+      try {
+        await axios.get('http://localhost:3000/usuario/1/carrinho')
+          .then(resp => {
+            console.log('Data received')
+            console.log(resp.data)
+            this.carrinho = resp.data
+            this.loading = false
+          })
+        // const data = req.data
+        // console.log(data)
+      } catch (e) {
+        console.log(e)
+        // alert(e)
+      }
+    },
+
+    async removeItem (id) {
+      try {
+        console.log('Removing item')
+        await axios.delete(`http://localhost:3000/usuario/1/carrinho/${id}`)
+          .then(resp => {
+            console.log('Pedido excluido')
+            console.log(resp.data)
+            this.carrinho = resp.data
+            // this.loading = false
+          })
+        // const data = req.data
+        // console.log(data)
+      } catch (e) {
+        console.log(e)
+        // alert(e)
+      }
+    }
   },
 
   beforeMount () {
+    this.getCarrinho()
     this.statusPedido.confirmado = false
     console.log(this.$router.history._startLocation)
     if (this.$router.history._startLocation === '/carrinho' && this.statusPedido.pagamento === true) {
-      this.pedidoAceito()
+      setTimeout(() => {
+        this.pedidoAceito()
+      }, 1500)
       console.log(this.showDialog)
     }
-  },
-
-  computed: {
-
   }
 }
 </script>

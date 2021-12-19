@@ -22,7 +22,7 @@
                 <h3>Quantidade: {{pedido.quantidade}}</h3>
               </v-row>
               <v-row>
-                <h3 class="last">Valor: R$ {{pedido.preco * pedido.quantidade}}</h3>
+                <h3 class="last">Valor: R$ {{(pedido.preco * pedido.quantidade).toFixed(2)}}</h3>
               </v-row>
             </v-col>
             <v-col class="d-flex justify-end">
