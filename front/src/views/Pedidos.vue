@@ -73,6 +73,7 @@ já esta sendo preparado!</div>
 </template>
 
 <script>
+import { _enum } from '../utils/enum.js'
 const axios = require('axios')
 export default {
   name: 'Pedidos',
@@ -94,7 +95,7 @@ export default {
     },
 
     checkPedidoConfirmado () {
-      return this.pedidos.slice(-1)[0].status === 2
+      return this.pedidos.slice(-1)[0].status === _enum.SENDO_PREPARADO
     },
 
     async getPedidos () {

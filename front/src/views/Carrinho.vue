@@ -58,14 +58,14 @@
                               <template>
                                 <v-card style="overflow: hidden">
                                   <v-row justify="center">
-                                    <v-icon v-if="pedido.status" size="200" color="green">mdi-check-bold</v-icon>
+                                    <v-icon v-if="checkPagamento()" size="200" color="green">mdi-check-bold</v-icon>
                                   </v-row>
                                   <v-row justify="center">
-                                    <v-icon v-if="!pedido.status" size="200" color="red">mdi-alert-circle-outline</v-icon>
+                                    <v-icon v-if="!checkPagamento()" size="200" color="red">mdi-alert-circle-outline</v-icon>
                                   </v-row>
                                   <v-card-text>
-                                    <div v-if="pedido.status" class="text-center text-h2 pa-12">Pagamento confirmado!</div>
-                                    <div v-if="!pedido.status" class="text-center text-h2 pa-12">Pagamento Negado!</div>
+                                    <div v-if="checkPagamento()" class="text-center text-h2 pa-12">Pagamento confirmado!</div>
+                                    <div v-if="!checkPagamento()" class="text-center text-h2 pa-12">Pagamento Negado!</div>
                                   </v-card-text>
                                   <v-card-actions class="justify-end">
                                     <v-btn
@@ -100,6 +100,7 @@
 
 <script>
 import Pedido from '../components/pedidoCarrinho.vue'
+import { _enum } from '../utils/enum.js'
 const axios = require('axios')
 export default {
   name: 'Carrinho',
@@ -130,6 +131,10 @@ export default {
           this.dialogPagamento = false
         }
       }
+    },
+
+    checkPagamento () {
+      return this.pedido.status >= _enum.AGUARDANDO_CONFIRMAÇÃO
     },
 
     async getCarrinho () {
