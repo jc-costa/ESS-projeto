@@ -4,7 +4,7 @@
       <v-col lg=10 sm=10>
         <v-card class="rounded-xl" max-height="600">
           <v-card-title>
-            <v-btn icon @click="goBack()">
+            <v-btn data-cy="btn-voltarPedidos" icon @click="goBack()">
               <v-icon>mdi-chevron-left</v-icon>
             </v-btn>
             Pedido #{{this.$route.params.id}}

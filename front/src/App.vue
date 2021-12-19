@@ -12,7 +12,7 @@
       <v-btn icon class="ml-3" data-cy="btn-carrinho" @click="goToView('Carrinho')">
         <v-icon>mdi-cart</v-icon>
       </v-btn>
-      <v-btn icon class="ml-3" @click="goToView('Pedidos')">
+      <v-btn icon class="ml-3" data-cy="btn-pedidos" @click="goToView('Pedidos')">
         <v-icon>mdi-clipboard-text</v-icon>
       </v-btn>
       <v-menu offset-y>
@@ -21,7 +21,7 @@
             <v-icon>mdi-dots-vertical</v-icon>
           </v-btn>
         </template>
-        <v-btn @click="logout()">
+        <v-btn data-cy="btn-logout" @click="logout()">
           <v-icon>mdi-logout</v-icon>
           <span>Sair</span>
         </v-btn>

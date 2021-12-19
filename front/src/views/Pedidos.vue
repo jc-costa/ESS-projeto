@@ -20,7 +20,7 @@
               <v-card-title>
                 <span>Pedido #{{pedido.id}} </span>
                 <v-spacer></v-spacer>
-                <v-btn icon @click="detalhePedido(pedido.id)">
+                <v-btn icon data-cy="btn-detalhesPedido" @click="detalhePedido(pedido.id)">
                   <v-icon>
                     mdi-chevron-right
                   </v-icon>
