@@ -98,23 +98,20 @@ export default {
     },
 
     async getPedidos () {
-      try {
-        await axios.get('http://localhost:3000/usuario/1/pedidos')
-          .then(resp => {
-            // console.log('Data pedidos received')
-            this.pedidos = resp.data.data
-            this.$store.dispatch('assignPedidos', resp.data)
-            console.log(this.$store.state.pedidos)
+      const userId = this.$store.state.user.id
+      await axios.get(`http://localhost:3000/usuario/${userId}/pedidos`)
+        .then(resp => {
+          this.pedidos = resp.data.data
+          this.$store.dispatch('assignPedidos', resp.data)
+          console.log(this.$store.state.pedidos)
 
-            const pedido = this.pedidos.slice(-1)[0]
-            if (pedido.status === 2 && this.checkNovoPedido()) {
-              this.showDialog = true
-              this.$store.dispatch('atualizaUltimoPedido', pedido.id)
-            }
-          })
-      } catch (e) {
-        console.log(e)
-      }
+          const pedido = this.pedidos.slice(-1)[0]
+          if (pedido.status === 2 && this.checkNovoPedido()) {
+            this.showDialog = true
+            this.$store.dispatch('atualizaUltimoPedido', pedido.id)
+          }
+        })
+        .catch(e => { console.log(e) })
     }
   },
 
