@@ -83,6 +83,7 @@ export default {
     return {
       // data -> Todos os pedidos dessa data
       pedidos: this.$store.state.pedidos,
+      ultimoPedido: this.$store.state.ultimoPedido,
       showDialog: false,
       pedido: null,
       timer: null
@@ -100,8 +101,11 @@ export default {
             console.log('Data received (carrinho)')
             console.log(resp.data)
             this.pedido = resp.data.data.slice(-1)[0]
-            if (this.pedido.status === 2) {
+            // const a = this.ultimoPedido.id
+            console.log(this.ultimoPedido.id)
+            if (this.pedido.status === 2 && this.pedido.id !== this.ultimoPedido.id) {
               this.showDialog = true
+              this.$store.dispatch('atualizaUltimoPedido', this.pedido.id)
             }
           })
         // const data = req.data

@@ -92,9 +92,9 @@
           </v-snackbar>
         </template>
   </v-container>
-  <v-btn @click="addItem()">
+  <!-- <v-btn @click="addItem()">
     add
-  </v-btn>
+  </v-btn> -->
 </v-app>
 </template>
 

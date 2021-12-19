@@ -61,9 +61,8 @@ export default new Vuex.Store({
         }
       ]
     },
-    statusPedido: {
-      pagamento: false,
-      confirmado: false
+    ultimoPedido: {
+      id: 0
     }
   },
   mutations: {
@@ -82,6 +81,9 @@ export default new Vuex.Store({
         nomeRestaurante: '',
         itens: []
       }
+    },
+    updateUltimoPedido (state, payload) {
+      state.ultimoPedido.id = payload
     }
   },
   actions: {
@@ -96,6 +98,9 @@ export default new Vuex.Store({
     limparCarrinho ({ commit }) {
       console.log('Removendo todos os pedidos da store')
       commit('mLimpaCarrinho')
+    },
+    atualizaUltimoPedido ({ commit }, payload) {
+      commit('updateUltimoPedido', payload)
     }
   },
   modules: {
