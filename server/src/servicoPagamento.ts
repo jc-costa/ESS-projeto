@@ -13,6 +13,7 @@ export class ServicoPagamento {
         this.instance = null;
     }
 
+    testeDeAPI: boolean = false;
     deveAceitar: boolean = true;
     pagamentos: Pagamento[] = [];
 
@@ -21,10 +22,12 @@ export class ServicoPagamento {
         this.pagamentos.push(pagamento);
         pagamento.adicionarObservador(pedido);
 
-        if (this.deveAceitar) {
-            this.pagamentoAceito(pagamento);
-        } else {
-            this.pagamentoCancelado(pagamento)
+        if (this.testeDeAPI) {
+            if (this.deveAceitar) {
+                this.pagamentoAceito(pagamento);
+            } else {
+                this.pagamentoCancelado(pagamento)
+            }
         }
     }
 

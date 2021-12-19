@@ -11,7 +11,7 @@ export class Restaurante {
     tempoMedioDePreparo: number;
     comandas: Comanda[] = [];
 
-
+    testeDeAPI: boolean = false;
     deveAceitar: boolean = true;
     deveFinalizar: boolean = false;
     deveCancelar: boolean = false;
@@ -32,15 +32,17 @@ export class Restaurante {
         novaComanda.adicionarObservador(pedido);
         this.comandas.push(novaComanda);
 
-        if (this.deveAceitar) {
-            this.confirmarComanda(novaComanda);
-            if (this.deveFinalizar) {
-                this.finalizarComanda(novaComanda);
-            } else if (this.deveCancelar) {
-                this.cancelarComanda(novaComanda);
+        if (this.testeDeAPI) {
+            if (this.deveAceitar) {
+                this.confirmarComanda(novaComanda);
+                if (this.deveFinalizar) {
+                    this.finalizarComanda(novaComanda);
+                } else if (this.deveCancelar) {
+                    this.cancelarComanda(novaComanda);
+                }
+            } else {
+                this.rejeitarComanda(novaComanda);
             }
-        } else {
-            this.rejeitarComanda(novaComanda);
         }
     }
 
