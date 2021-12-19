@@ -17,11 +17,11 @@
       </v-btn>
       <v-menu offset-y>
         <template v-slot:activator="{ on, attrs }">
-          <v-btn v-on="on" v-bind="attrs" icon class="ml-3 mr-1">
+          <v-btn data-cy="btn-logout" v-on="on" v-bind="attrs" icon class="ml-3 mr-1">
             <v-icon>mdi-dots-vertical</v-icon>
           </v-btn>
         </template>
-        <v-btn data-cy="btn-logout" @click="logout()">
+        <v-btn data-cy="btn-sair" @click="logout()">
           <v-icon>mdi-logout</v-icon>
           <span>Sair</span>
         </v-btn>
