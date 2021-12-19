@@ -49,7 +49,7 @@ var itens = [
         restaurante: restaurantes[0]
     }),
     new ItemCarrinho(<ItemCarrinho> {
-        id: 1,
+        id: 2,
         descricao: "Coca-Cola",
         preco: 10,
         quantidade: 1,
@@ -59,7 +59,31 @@ var itens = [
 ]
 var usuarios = [
     new Usuario(1, "Breno Miranda", new Carrinho(restaurantes[0], itens)),
-    new Usuario(2, "Paulo Borba", undefined, [new Pedido(<Pedido> {id: 1, itens: [itens[0]], valorTotal: 40, status: StatusPedido.COMPLETO, restaurante: restaurantes[0]})])
+    new Usuario(2, "Paulo Borba", 
+        undefined, 
+        [   
+            new Pedido(
+                <Pedido> 
+                    {
+                        id: 1, 
+                        itens: [itens[0], itens[1]], 
+                        valorTotal: 50, 
+                        status: StatusPedido.COMPLETO,
+                        data: new Date(), 
+                        restaurante: restaurantes[0]
+                    }
+            ),
+            new Pedido(
+                <Pedido> 
+                    {
+                        id: 2, 
+                        itens: [itens[1]], 
+                        valorTotal: 50, 
+                        status: StatusPedido.COMPLETO, 
+                        restaurante: restaurantes[0]
+                    }
+            )
+    ])
 ]
 
 /*
@@ -80,7 +104,11 @@ app.get('/usuario/:id/carrinho', function (req, res) {
     const usuario = usuarios.find(u => u.id == id);
 
     if (usuario) {
-        return res.status(200).json({data: usuario.pegarCarrinho().pegarInformacao()});
+        if(usuario.pegarCarrinho().pegarItens().length > 0){
+            return res.status(200).json({data: usuario.pegarCarrinho().pegarInformacao()});
+        } else {
+            return res.status(404).json({error: "Carrinho não encontrado"});
+        }
     } else {
         return res.status(404).json({error: "Usuário não encontrado"});
     }
@@ -163,6 +191,7 @@ app.get('/usuario/:id/pedidos', function (req, res) {
     const usuario = usuarios.find(u => u.id == id);
 
     if (usuario) {
+        
         return res.status(200).json({data: usuario.pegarPedidos().map(pedido => pedido.pegarInformacao())});
     } else {
         return res.status(404).json({error: "Usuário não encontrado"});
@@ -206,6 +235,33 @@ app.put('/usuario/:id/pedidos/:idPedido/cancelar', function (req, res) {
         }
     } else {
         return res.status(404).json({error: "Usuário não encontrado"});
+    }
+})
+
+app.get('/usuario/:id', function(req, res) {
+
+    console.log('aaaaa')
+    const id: number = +req.params.id;
+    const usuario = usuarios.find(u => u.id == id);
+
+    if (usuario) {
+        return res.status(200).json({data: usuario.pegarNome()});
+    } else {
+        return res.status(404).json({error: "Usuário não encontrado"});
+    }
+})
+
+app.get('/login', function(req, res) {
+    
+    const nome = req.query.nome;
+    const usuario = usuarios.find(u => u.pegarNome() == nome);
+    if (usuario) {
+        return res.status(200).json({
+            id: usuario.id,
+            ultimoPedido: usuario.pegarPedidos().length
+        });
+    } else {
+        return res.status(404).json({error: "Usuário não encontrado", "user": nome});
     }
 })
 

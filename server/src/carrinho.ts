@@ -48,7 +48,7 @@ export class Carrinho {
         if (this.restaurante === undefined) {
             this.restaurante = item.restaurante;
         }
-        if (item.restaurante != this.restaurante) {
+        if (item.restaurante.id != this.restaurante.id) {
             throw new Error('O item não pertence ao restaurante');
         }
         let foundItem = this.itens.find((mItem) => mItem.id === item.id);

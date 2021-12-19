@@ -6,6 +6,14 @@ import vuetify from './plugins/vuetify'
 
 Vue.config.productionTip = false
 
+router.beforeEach((to, from, next) => {
+  if (to.name !== 'Login' && store.state.user.id === null) {
+    router.push('/')
+  } else {
+    next()
+  }
+})
+
 new Vue({
   router,
   store,
