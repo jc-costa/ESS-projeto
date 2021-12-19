@@ -68,6 +68,7 @@ var usuarios = [
                         id: 2, 
                         itens: [itens[1]], 
                         valorTotal: 50, 
+                        data: new Date(), 
                         status: StatusPedido.COMPLETO, 
                         restaurante: restaurantes[0]
                     }
@@ -230,7 +231,6 @@ app.put('/usuario/:id/pedidos/:idPedido/cancelar', function (req, res) {
 
 app.get('/usuario/:id', function(req, res) {
 
-    console.log('aaaaa')
     const id: number = +req.params.id;
     const usuario = usuarios.find(u => u.id == id);
 

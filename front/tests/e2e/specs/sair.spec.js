@@ -1,5 +1,5 @@
 /// <reference types ="cypress" />
-
+//Testa se ao clicar no botão sair, ele sai da conta que estava logada
 describe('Sair', () => {
     it('Clica em sair deve fazer voltar para página de login', () => {
       cy.visit('/')

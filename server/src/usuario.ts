@@ -1,6 +1,7 @@
 import { Carrinho } from "./carrinho";
 import { Observador } from "./interfaces/observer";
 import { Pedido, StatusPedido } from "./pedido";
+import { ServicoPagamento } from "./servicoPagamento";
 
 export class Usuario {
     id: number;
@@ -42,6 +43,7 @@ export class Usuario {
             restaurante: this.carrinho.pegarRestaurante()
         });
         pedido.adicionarObservador(this);
+        ServicoPagamento.getInstance().pagarPedido(pedido)
         this.pedidos.push(pedido);
         this.carrinho = new Carrinho();
     }

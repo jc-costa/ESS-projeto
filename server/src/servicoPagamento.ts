@@ -13,7 +13,7 @@ export class ServicoPagamento {
         this.instance = null;
     }
 
-    testeDeAPI: boolean = false;
+    testeDeAPI: boolean = true;
     deveAceitar: boolean = true;
     pagamentos: Pagamento[] = [];
 

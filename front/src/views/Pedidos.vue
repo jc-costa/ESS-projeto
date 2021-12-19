@@ -33,6 +33,7 @@
                 <div v-for="(item, index) in pedido.itens" :key="index">
                   <p id="descricao">- {{item.descricao}}</p>
                 </div>
+                <div class="text-h5 pa-12"> {{getStatusPedido(pedido)}}</div>
               </v-card-text>
             </v-card>
         </v-col>
@@ -92,6 +93,29 @@ export default {
       this.$router.push(`/detalhe/${id}`)
     },
 
+    getStatusPedido (pedido) {
+      switch (pedido.status) {
+        case 0:
+          return 'Aguardando Pagamento'
+        case 1:
+          return 'Aguardando Confirmação'
+        case 2:
+          return 'Sendo Preparado'
+        case 3:
+          return 'Aguardando Entregador'
+        case 4:
+          return 'Sendo Entregue'
+        case 5:
+          return 'Aguardando Coleta'
+        case 6:
+          return 'Completo'
+        case 7:
+          return 'Cancelado pelo cliente'
+        case 8:
+          return 'Cancelado pelo restaurante'
+      }
+    },
+
     checkNovoPedido () {
       return this.pedidos.slice(-1)[0].id !== this.ultimoPedido.id
     },
@@ -105,6 +129,7 @@ export default {
       await axios.get(`http://localhost:3000/usuario/${userId}/pedidos`)
         .then(resp => {
           this.pedidos = resp.data.data
+          console.log(this.pedidos)
           if (this.pedidos.length > 0) {
             this.$store.dispatch('assignPedidos', resp.data)
             const pedido = this.pedidos.slice(-1)[0]

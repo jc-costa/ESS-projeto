@@ -1,7 +1,7 @@
 <template>
   <v-main class="ma-5">
     <v-row align="center" justify="center">
-      <v-col>
+      <v-col lg="8">
         <v-row>Usuário</v-row>
         <v-row>
           <v-text-field data-cy="nome-usuario" v-model="username"></v-text-field>
