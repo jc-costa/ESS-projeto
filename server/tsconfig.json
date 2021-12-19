@@ -8,7 +8,7 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "lib": [ "ES2015", "dom" ],
-        "noImplicitAny": true,
+        "noImplicitAny": false,
         "outDir": "typeScript",
         "suppressImplicitAnyIndexErrors": true
     },
