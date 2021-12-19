@@ -126,7 +126,7 @@ export default {
     goToPedidos () {
       if (this.pedido !== null) {
         if (this.pedido.status !== 0) {
-          this.$router.push('/')
+          this.$router.push('/pedidos')
         } else {
           this.dialogPagamento = false
         }

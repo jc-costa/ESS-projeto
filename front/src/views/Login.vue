@@ -33,12 +33,14 @@ export default {
         }
       })
         .then(resp => {
-          console.log(resp.data.data)
+          console.log(resp.data.id)
           const user = {
-            id: resp.data.data,
+            id: resp.data.id,
             name: this.username
           }
+          const ultimoPedido = resp.data.ultimoPedido
           this.$store.dispatch('atualizaUser', user)
+          this.$store.dispatch('atualizaUltimoPedido', ultimoPedido)
           this.$router.push('/pedidos')
         })
         .catch(e => {
