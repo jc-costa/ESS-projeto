@@ -83,7 +83,7 @@ var usuarios = [
                         restaurante: restaurantes[0]
                     }
             )
-        ])
+    ])
 ]
 
 /*
@@ -104,7 +104,11 @@ app.get('/usuario/:id/carrinho', function (req, res) {
     const usuario = usuarios.find(u => u.id == id);
 
     if (usuario) {
-        return res.status(200).json({data: usuario.pegarCarrinho().pegarInformacao()});
+        if(usuario.pegarCarrinho().pegarItens().length > 0){
+            return res.status(200).json({data: usuario.pegarCarrinho().pegarInformacao()});
+        } else {
+            return res.status(404).json({error: "Carrinho não encontrado"});
+        }
     } else {
         return res.status(404).json({error: "Usuário não encontrado"});
     }
@@ -187,6 +191,7 @@ app.get('/usuario/:id/pedidos', function (req, res) {
     const usuario = usuarios.find(u => u.id == id);
 
     if (usuario) {
+        
         return res.status(200).json({data: usuario.pegarPedidos().map(pedido => pedido.pegarInformacao())});
     } else {
         return res.status(404).json({error: "Usuário não encontrado"});
@@ -228,6 +233,17 @@ app.put('/usuario/:id/pedidos/:idPedido/cancelar', function (req, res) {
         } catch (erro) {
             return res.status(409).json({error: erro.message});
         }
+    } else {
+        return res.status(404).json({error: "Usuário não encontrado"});
+    }
+})
+
+app.get('/usuario/:id', function(req, res) {
+    const id: number = +req.params.id;
+    const usuario = usuarios.find(u => u.id == id);
+
+    if (usuario) {
+        return res.status(200).json({data: usuario.pegarNome()});
     } else {
         return res.status(404).json({error: "Usuário não encontrado"});
     }
