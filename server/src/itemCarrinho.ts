@@ -16,4 +16,18 @@ export class ItemCarrinho {
         this.restaurante = item.restaurante;
         this.detalhes = item.detalhes;
     }
+
+    pegarInformacao() {
+        return {
+            id: this.id,
+            descricao: this.descricao,
+            preco: this.preco,
+            quantidade: this.quantidade,
+            restaurante: {
+                id: this.restaurante.id,
+                nome: this.restaurante.nome
+            },
+            detalhes: this.detalhes
+        }
+    }
 }
