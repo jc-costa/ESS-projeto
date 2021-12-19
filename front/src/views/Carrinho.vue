@@ -30,6 +30,7 @@
                     <template>
                       <div class="text-center">
                         <v-btn
+                          data-cy="btn-confirmar-pedido"
                           color="deep-purple accent-4"
                           class="white--text"
                           @click="overlay = !overlay; fazerPedido()"
@@ -70,6 +71,7 @@
                                   <v-card-actions class="justify-end">
                                     <v-btn
                                       text
+                                      data-cy="btn-ok-pagamento-confirmado"
                                       @click="dialog = false; goToPedidos()"
                                     >Ok</v-btn>
                                   </v-card-actions>
