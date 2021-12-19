@@ -23,18 +23,78 @@
                       <h2 class="ma-0">Valor total:</h2>
                     </v-row>
                     <v-row>
-                      <h3 class="ml-10" style="font-weight:normal">R$ {{this.carrinho.data.precoTotal}}</h3>
+                      <h3 class="ml-10" style="font-weight:normal">R$ {{this.carrinho.data.precoTotal.toFixed(2)}}</h3>
                     </v-row>
                   </v-col>
                   <v-col cols="2" class="d-flex align-end justify-center">
-                    <v-btn class="mt-3" color="green" dark style="text">Confirmar</v-btn>
+                    <template>
+                      <div class="text-center">
+                        <v-btn
+                          color="deep-purple accent-4"
+                          class="white--text"
+                          @click="overlay = !overlay; fazerPedido()"
+                        >
+                          Confirmar
+                          <v-icon right>
+                            mdi-open-in-new
+                          </v-icon>
+                        </v-btn>
+                        <v-overlay :value="overlay">
+                          <v-progress-circular
+                            indeterminate
+                            size="64"
+                          ></v-progress-circular>
+                        </v-overlay>
+                      </div>
+                      <template>
+                        <v-row justify="space-around">
+                          <v-col cols="auto">
+                            <v-dialog
+                              overflow="hidden"
+                              v-if="dialogPagamento" v-model="dialogPagamento"
+                              transition="dialog-top-transition"
+                              max-width="600"
+                            >
+                              <template>
+                                <v-card style="overflow: hidden">
+                                  <v-row justify="center">
+                                    <v-icon v-if="pedido.status" size="200" color="green">mdi-check-bold</v-icon>
+                                  </v-row>
+                                  <v-row justify="center">
+                                    <v-icon v-if="!pedido.status" size="200" color="red">mdi-alert-circle-outline</v-icon>
+                                  </v-row>
+                                  <v-card-text>
+                                    <div v-if="pedido.status" class="text-center text-h2 pa-12">Pagamento confirmado!</div>
+                                    <div v-if="!pedido.status" class="text-center text-h2 pa-12">Pagamento Negado!</div>
+                                  </v-card-text>
+                                  <v-card-actions class="justify-end">
+                                    <v-btn
+                                      text
+                                      @click="dialog = false; goToPedidos()"
+                                    >Ok</v-btn>
+                                  </v-card-actions>
+                                </v-card>
+                              </template>
+                            </v-dialog>
+                          </v-col>
+                        </v-row>
+                      </template>
+                    </template>
                   </v-col>
                 </v-row>
               </v-card-text>
             </v-card>
           </v-col>
         </v-row>
+        <template>
+          <v-snackbar :color="snackbar.color" v-model="snackbar.show">
+            {{ snackbar.message }}
+          </v-snackbar>
+        </template>
   </v-container>
+  <!-- <v-btn @click="addItem()">
+    add
+  </v-btn> -->
 </v-app>
 </template>
 
@@ -48,26 +108,33 @@ export default {
     return {
       // carrinho: this.$store.state.carrinho,
       loading: true,
-      carrinho: null
-    }
-  },
-
-  components: {
-    Pedido
-  },
-
-  computed: {
-    carrinhoVazio () {
-      return this.carrinho.data.itens.length === 0
+      carrinho: null,
+      pedido: null,
+      overlay: false,
+      statusPedido: this.$store.state.statusPedido,
+      dialogPagamento: false,
+      snackbar: {
+        show: false,
+        message: null,
+        color: null
+      }
     }
   },
 
   methods: {
+    goToPedidos () {
+      if (this.pedido.status !== 0) {
+        this.$router.push('/pedidos')
+      } else {
+        this.dialogPagamento = false
+      }
+    },
+
     async getCarrinho () {
       try {
         await axios.get('http://localhost:3000/usuario/1/carrinho')
           .then(resp => {
-            console.log('Data received')
+            console.log('Data received (carrinho)')
             console.log(resp.data)
             this.carrinho = resp.data
             this.loading = false
@@ -79,6 +146,51 @@ export default {
         // alert(e)
       }
     },
+
+    async fazerPedido () {
+      try {
+        await axios.post('http://localhost:3000/usuario/1/pedidos')
+          .then(resp => {
+            console.log('Data received (pedido)')
+            console.log(resp.data)
+            this.pedido = resp.data.data.slice(-1)[0]
+            console.log(this.pedido)
+            setTimeout(() => {
+              this.overlay = false
+              this.dialogPagamento = true
+            }, 500)
+          })
+        // const data = req.data
+        // console.log(data)
+      } catch (e) {
+        console.log(e)
+        // alert(e)
+      }
+    },
+
+    async addItem () {
+      try {
+        await axios.post('http://localhost:3000/usuario/1/carrinho', {
+          id: 1,
+          restaurante: {
+            id: 1,
+            nome: 'Pizza Hut'
+          },
+          quantidade: 2
+        }).then(resp => {
+          console.log('Data received (carrinho)')
+          console.log(resp.data)
+          this.carrinho = resp.data
+          this.loading = false
+        })
+        // const data = req.data
+        // console.log(data)
+      } catch (e) {
+        console.log(e)
+        // alert(e)
+      }
+    },
+
     async removeItem (id) {
       try {
         console.log('Removing item')
@@ -97,6 +209,17 @@ export default {
       }
     }
   },
+
+  components: {
+    Pedido
+  },
+
+  computed: {
+    carrinhoVazio () {
+      return this.carrinho.data.itens.length === 0
+    }
+  },
+
   created () {
     this.getCarrinho()
   }
