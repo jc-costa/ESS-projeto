@@ -68,6 +68,7 @@ var usuarios = [
                         id: 2, 
                         itens: [itens[1]], 
                         valorTotal: 50, 
+                        data: new Date(), 
                         status: StatusPedido.COMPLETO, 
                         restaurante: restaurantes[0]
                     }
