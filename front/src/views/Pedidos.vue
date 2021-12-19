@@ -104,10 +104,8 @@ export default {
         .then(resp => {
           this.pedidos = resp.data.data
           this.$store.dispatch('assignPedidos', resp.data)
-          console.log(this.$store.state.pedidos)
-
           const pedido = this.pedidos.slice(-1)[0]
-          if (pedido.status === 2 && this.checkNovoPedido()) {
+          if (this.checkPedidoConfirmado() && this.checkNovoPedido()) {
             this.showDialog = true
             this.$store.dispatch('atualizaUltimoPedido', pedido.id)
           }
