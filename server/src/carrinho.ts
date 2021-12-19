@@ -2,11 +2,11 @@ import { ItemCarrinho } from "./itemCarrinho";
 import { Restaurante } from "./restaurante";
 
 export class Carrinho {
-    private restaurante: Restaurante = null;
+    private restaurante: Restaurante;
     private itens: ItemCarrinho[] = [];
 
     constructor(restaurante: Restaurante = undefined, itens: ItemCarrinho[] = undefined) {
-        this.restaurante = restaurante || null;
+        this.restaurante = restaurante;
         this.itens = itens || [];
 
         // Verifica se todos os itens são do mesmo restaurante
@@ -38,6 +38,7 @@ export class Carrinho {
 
     limpar() {
         this.itens = [];
+        this.restaurante = undefined;
     }
 
     adicionarItem(item: ItemCarrinho) {
@@ -68,7 +69,7 @@ export class Carrinho {
         let foundItem = this.itens.find((mItem) => mItem.id === item.id);
         if (foundItem) {
             foundItem.quantidade = item.quantidade;
-            foundItem.descricao = item.descricao;
+            foundItem.detalhes = item.detalhes;
         }
     }
 

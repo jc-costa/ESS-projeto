@@ -21,14 +21,7 @@ describe("Realização de Pedidos", () => {
         // Given um usuario com um carrinho
         const restaurante = new Restaurante(1, "Pizza Hut", "Rua A", "(99) 99999-9999", "10:00-22:00")
         const itens = [
-            new ItemCarrinho(<ItemCarrinho>{
-                id: 1,
-                descricao: "Pizza",
-                quantidade: 1,
-                preco: 40.0,
-                detalhes: "sem cebola",
-                restaurante: restaurante
-            })
+            new ItemCarrinho(1, "Pizza", 1, 40.0, restaurante, "sem cebola"),
         ];
         const carrinho = new Carrinho(restaurante, itens);
         usuario = new Usuario(1, "Breno Miranda", carrinho);
