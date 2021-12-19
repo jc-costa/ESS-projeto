@@ -4,11 +4,12 @@
       app
       color="primary"
       dark
+      style="height: 64px"
     >
-      <span>Nome App</span>
+      <span>CInFood/span>
       <v-spacer></v-spacer>
-      <span>Nome Usuario</span>
-      <v-btn icon class="ml-3" @click="goToView('Carrinho')">
+      <span>{{this.$store.state.user.name}}</span>
+      <v-btn icon class="ml-3" data-cy="btn-carrinho" @click="goToView('Carrinho')">
         <v-icon>mdi-cart</v-icon>
       </v-btn>
       <v-btn icon class="ml-3" @click="goToView('Pedidos')">
@@ -34,7 +35,7 @@
 </template>
 
 <script>
-
+const axios = require('axios')
 export default {
   name: 'App',
 
@@ -45,12 +46,37 @@ export default {
     goToView (page) {
       switch (page) {
         case 'Carrinho':
-          this.$router.push('/carrinho')
+          if (this.$route.name !== 'CarrinhoCompras') { this.$router.push('/carrinho') }
           break
         case 'Pedidos':
-          this.$router.push('/pedidos')
+          if (this.$route.name !== 'Pedidos') { this.$router.push('/pedidos') }
+      }
+    },
+    async getUser () {
+      try {
+        const id = 1
+        await axios.get(`http://localhost:3000/usuario/${id}`)
+          .then(resp => {
+            const payload = {
+              name: resp.data.data,
+              id: id
+            }
+            this.$store.dispatch('atualizaUser', payload)
+          })
+      } catch (e) {
+        console.log(e)
+        // alert(e)
       }
     }
+  },
+  beforeMount () {
+    this.getUser()
   }
 }
 </script>
+
+<style>
+  div.v-application--wrap {
+    min-height:calc(100vh - 100px) !important;
+  }
+</style>

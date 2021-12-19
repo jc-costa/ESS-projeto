@@ -3,7 +3,8 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Test from '../views/Test.vue'
 import Pedidos from '../views/Pedidos.vue'
-import DetalhePedido from '../views/DetalhesPedidos.vue'
+import DetalhesPedidos from '../views/DetalhesPedidos.vue'
+import Carrinho from '../views/Carrinho.vue'
 
 Vue.use(VueRouter)
 
@@ -25,8 +26,13 @@ const routes = [
   },
   {
     path: '/detalhe/:id',
-    name: 'Detalhe Pedido',
-    component: DetalhePedido
+    name: 'DetalhePedido',
+    component: DetalhesPedidos
+  },
+  {
+    path: '/carrinho',
+    name: 'CarrinhoCompras',
+    component: Carrinho
   }
 ]
 
@@ -34,6 +40,12 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeResolve((to, from, next) => {
+  if (to.path !== from.path) {
+    next()
+  }
 })
 
 export default router

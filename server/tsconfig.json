@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "target": "ES2015",
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "lib": [ "ES2015", "dom" ],
+        "noImplicitAny": false,
+        "outDir": "typeScript",
+        "suppressImplicitAnyIndexErrors": true
+    },
+    "compileOnSave": true,
+}
