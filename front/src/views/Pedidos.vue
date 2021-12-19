@@ -104,16 +104,10 @@ export default {
       await axios.get(`http://localhost:3000/usuario/${userId}/pedidos`)
         .then(resp => {
           this.pedidos = resp.data.data
-          console.log(this.pedidos)
           if (this.pedidos.length > 0) {
             this.$store.dispatch('assignPedidos', resp.data)
-            // console.log(this.$store.state.pedidos)
-
             const pedido = this.pedidos.slice(-1)[0]
-            console.log(pedido)
-            console.log(this.checkNovoPedido())
-            if (pedido.status === 2 && this.checkNovoPedido()) {
-              console.log('Atulizar status pedido')
+            if (this.checkPedidoConfirmado() && this.checkNovoPedido()) {
               this.showDialog = true
               this.$store.dispatch('atualizaUltimoPedido', pedido.id)
             }
