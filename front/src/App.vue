@@ -6,7 +6,7 @@
       dark
       style="height: 64px"
     >
-      <span>Nome App</span>
+      <span>CInFood</span>
       <v-spacer></v-spacer>
       <span>{{this.$store.state.user.name}}</span>
       <v-btn icon class="ml-3" data-cy="btn-carrinho" @click="goToView('Carrinho')">
