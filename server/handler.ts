@@ -21,6 +21,7 @@ app.use(allowCrossDomain);
 app.use(bodyParser.json());
 
 var configs = {
+    testeDeAPI: false,
     pagamentoCancelado: false,
     restauranteRejeita: false,
     restauranteFinaliza: true,
@@ -28,8 +29,10 @@ var configs = {
 }
 
 function atualizarConfigs() {
+    ServicoPagamento.getInstance().testeDeAPI = configs.testeDeAPI;
     ServicoPagamento.getInstance().deveAceitar = !configs.pagamentoCancelado;
     restaurantes.forEach(restaurante => {
+        restaurante.testeDeAPI = configs.testeDeAPI;
         restaurante.deveAceitar = !configs.restauranteRejeita;
         restaurante.deveFinalizar = configs.restauranteFinaliza;
         restaurante.deveCancelar = configs.restauranteCancela;
@@ -40,22 +43,8 @@ var restaurantes = [
     new Restaurante(1, "Pizza Hut", "Rua A", "(99) 9999-9999", "10:00 - 21:30"),
 ]
 var itens = [
-    new ItemCarrinho(<ItemCarrinho> {
-        id: 1,
-        descricao: "Pizza Grande",
-        preco: 40,
-        quantidade: 1,
-        detalhes: "Sem cebola",
-        restaurante: restaurantes[0]
-    }),
-    new ItemCarrinho(<ItemCarrinho> {
-        id: 2,
-        descricao: "Coca-Cola",
-        preco: 10,
-        quantidade: 1,
-        detalhes: "",
-        restaurante: restaurantes[0]
-    })
+    new ItemCarrinho(1, "Pizza Grande", 40, 1, restaurantes[0], "Sem cebola"),
+    new ItemCarrinho(2, "Coca-Cola", 10, 1, restaurantes[0], ""),
 ]
 var usuarios = [
     new Usuario(1, "Breno Miranda", new Carrinho(restaurantes[0], itens)),
@@ -123,6 +112,7 @@ app.post('/usuario/:id/carrinho', function (req, res) {
 
     if (usuario) {
         const newItem: ItemCarrinho = <ItemCarrinho> req.body;
+        newItem.restaurante = restaurantes.find(restaurante => restaurante.id == newItem.restaurante.id);
         try {
             usuario.pegarCarrinho().adicionarItem(newItem);
             return res.status(200).json({data: usuario.pegarCarrinho().pegarInformacao()});
