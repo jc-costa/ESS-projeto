@@ -13,9 +13,9 @@
               />
           </v-row>
         </v-row>
-        <v-row v-if="!carrinhoVazio" no-gutters class="align-end shrink">
-          <v-col>
-            <v-card style="height: 90px">
+        <v-row v-if="!carrinhoVazio" no-gutters justify="center" class="align-end shrink">
+          <v-col lg="10">
+            <v-card style="height: 90px" class="rounded-xl">
               <v-card-text class="rounded-xl">
                 <v-row no-gutters>
                   <v-col cols="10">
