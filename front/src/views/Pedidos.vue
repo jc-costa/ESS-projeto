@@ -73,6 +73,7 @@ já esta sendo preparado!</div>
 </template>
 
 <script>
+import { _enum } from '../utils/enum.js'
 const axios = require('axios')
 export default {
   name: 'Pedidos',
@@ -94,20 +95,19 @@ export default {
     },
 
     checkPedidoConfirmado () {
-      return this.pedidos.slice(-1)[0].status === 2
+      return this.pedidos.slice(-1)[0].status === _enum.SENDO_PREPARADO
     },
 
     async getPedidos () {
       try {
-        await axios.get('http://localhost:3000/usuario/1/pedidos')
+        await axios.get('http://localhost:3000/usuario/2/pedidos')
           .then(resp => {
             // console.log('Data pedidos received')
             this.pedidos = resp.data.data
             this.$store.dispatch('assignPedidos', resp.data)
-            console.log(this.$store.state.pedidos)
-
             const pedido = this.pedidos.slice(-1)[0]
-            if (pedido.status === 2 && this.checkNovoPedido()) {
+            if (this.checkNovoPedido() && this.checkPedidoConfirmado()) {
+              console.log('12345')
               this.showDialog = true
               this.$store.dispatch('atualizaUltimoPedido', pedido.id)
             }

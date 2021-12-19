@@ -58,14 +58,14 @@
                               <template>
                                 <v-card style="overflow: hidden">
                                   <v-row justify="center">
-                                    <v-icon v-if="pedido.status" size="200" color="green">mdi-check-bold</v-icon>
+                                    <v-icon v-if="checkPagamento()" size="200" color="green">mdi-check-bold</v-icon>
                                   </v-row>
                                   <v-row justify="center">
-                                    <v-icon v-if="!pedido.status" size="200" color="red">mdi-alert-circle-outline</v-icon>
+                                    <v-icon v-if="!checkPagamento()" size="200" color="red">mdi-alert-circle-outline</v-icon>
                                   </v-row>
                                   <v-card-text>
-                                    <div v-if="pedido.status" class="text-center text-h2 pa-12">Pagamento confirmado!</div>
-                                    <div v-if="!pedido.status" class="text-center text-h2 pa-12">Pagamento Negado!</div>
+                                    <div v-if="checkPagamento()" class="text-center text-h2 pa-12">Pagamento confirmado!</div>
+                                    <div v-if="!checkPagamento()" class="text-center text-h2 pa-12">Pagamento Negado!</div>
                                   </v-card-text>
                                   <v-card-actions class="justify-end">
                                     <v-btn
@@ -100,6 +100,7 @@
 
 <script>
 import Pedido from '../components/pedidoCarrinho.vue'
+import { _enum } from '../utils/enum.js'
 const axios = require('axios')
 export default {
   name: 'Carrinho',
@@ -130,9 +131,13 @@ export default {
       }
     },
 
+    checkPagamento () {
+      return this.pedido.status >= _enum.AGUARDANDO_CONFIRMAÇÃO
+    },
+
     async getCarrinho () {
       try {
-        await axios.get('http://localhost:3000/usuario/1/carrinho')
+        await axios.get('http://localhost:3000/usuario/2/carrinho')
           .then(resp => {
             console.log('Data received (carrinho)')
             console.log(resp.data)
@@ -149,7 +154,7 @@ export default {
 
     async fazerPedido () {
       try {
-        await axios.post('http://localhost:3000/usuario/1/pedidos')
+        await axios.post('http://localhost:3000/usuario/2/pedidos')
           .then(resp => {
             console.log('Data received (pedido)')
             console.log(resp.data)
@@ -170,7 +175,7 @@ export default {
 
     async addItem () {
       try {
-        await axios.post('http://localhost:3000/usuario/1/carrinho', {
+        await axios.post('http://localhost:3000/usuario/2/carrinho', {
           id: 1,
           restaurante: {
             id: 1,
@@ -194,7 +199,7 @@ export default {
     async removeItem (id) {
       try {
         console.log('Removing item')
-        await axios.delete(`http://localhost:3000/usuario/1/carrinho/${id}`)
+        await axios.delete(`http://localhost:3000/usuario/2/carrinho/${id}`)
           .then(resp => {
             console.log('Pedido excluido')
             console.log(resp.data)
