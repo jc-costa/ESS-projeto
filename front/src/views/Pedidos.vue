@@ -62,6 +62,7 @@
                   <v-card-actions class="justify-end">
                     <v-btn
                       text
+                      data-cy="btn-ok-pedido-confirmado"
                       @click="showDialog = false"
                     >Ok</v-btn>
                   </v-card-actions>

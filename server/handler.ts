@@ -256,7 +256,10 @@ app.get('/login', function(req, res) {
     const nome = req.query.nome;
     const usuario = usuarios.find(u => u.pegarNome() == nome);
     if (usuario) {
-        return res.status(200).json({data: usuario.id});
+        return res.status(200).json({
+            id: usuario.id,
+            ultimoPedido: usuario.pegarPedidos().length
+        });
     } else {
         return res.status(404).json({error: "Usuário não encontrado", "user": nome});
     }
