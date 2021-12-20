@@ -18,7 +18,7 @@
         <v-col lg=10>
             <v-card id="pedido" class="mt-3 rounded-xl">
               <v-card-title>
-                <span>Pedido #{{pedido.id}} </span>
+                <span>Pedido #{{pedido.id}} {{getStatusPedido(pedido)}}</span>
                 <v-spacer></v-spacer>
                 <v-btn icon data-cy="btn-detalhesPedido" @click="detalhePedido(pedido.id)">
                   <v-icon>
@@ -33,7 +33,6 @@
                 <div v-for="(item, index) in pedido.itens" :key="index">
                   <p id="descricao">- {{item.descricao}}</p>
                 </div>
-                <div class="text-h5 pa-12"> {{getStatusPedido(pedido)}}</div>
               </v-card-text>
             </v-card>
         </v-col>
