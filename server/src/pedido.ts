@@ -49,10 +49,7 @@ export class Pedido extends Observavel implements Observador {
             horaPedido: this.horaPedido,
             horaEntrega: this.horaEntrega,
             status: this.status,
-            restaurante: {
-                id: this.restaurante.id,
-                nome: this.restaurante.nome,
-            }
+            restaurante: this.restaurante.pegarInformacao()
         }
     }
 
