@@ -1,88 +1,157 @@
 <template>
-    <v-main>
+  <div>
+    <v-container v-if="!temPedido" class="d-flex flex-column grow">
+      <v-col>
+        <v-row align="center" justify="center" style="height: calc(100vh - 100px) !important">
+          <h2>Não existem pedidos realizados!</h2>
+        </v-row>
+      </v-col>
+    </v-container>
+    <div v-else>
       <v-row
+        class="ma-0"
         no-gutters
         align="center"
         justify="center"
         v-for="(pedido, index) in this.pedidos" :key="index"
       >
-        <v-col lg=8>
-          <v-row no-gutters>
-            <v-card id="date" class="rounded-xl mt-6">
-              <v-card-title>
-                {{pedido.dataPedido}}
-              </v-card-title>
-            </v-card>
-          </v-row>
-          <v-row
-            no-gutters
-            v-for="(infoPedido, index) in pedido.infoPedidos" :key="index"
-          >
+        <v-col lg=10>
             <v-card id="pedido" class="mt-3 rounded-xl">
               <v-card-title>
-                <span>Pedido #{{infoPedido.id}} </span>
+                <span>Pedido #{{pedido.id}} {{getStatusPedido(pedido)}}</span>
                 <v-spacer></v-spacer>
-                <v-btn icon @click="detalhePedido(infoPedido.id)">
+                <v-btn icon data-cy="btn-detalhesPedido" @click="detalhePedido(pedido.id)">
                   <v-icon>
                     mdi-chevron-right
                   </v-icon>
                 </v-btn>
               </v-card-title>
-              <v-card-text>
-                {{infoPedido.descricao}}
+              <v-card-text style="text-align: justify">
+                <p>Restaurante:</p>
+                <p id="descricao">- {{pedido.itens[0].restaurante.nome}}</p>
+                <p>Itens: </p>
+                <div v-for="(item, index) in pedido.itens" :key="index">
+                  <p id="descricao">- {{item.descricao}}</p>
+                </div>
+                <div id="status" class="text-h5 pa-12"> Status: {{getStatusPedido(pedido)}}</div>
               </v-card-text>
             </v-card>
-          </v-row>
         </v-col>
       </v-row>
-    </v-main>
+      <template>
+        <!-- <v-btn @click="showDialog = true">Show Dialog</v-btn> -->
+            <v-dialog
+              overflow="hidden"
+              v-model="showDialog"
+              transition="dialog-top-transition"
+              max-width="600"
+            >
+              <template>
+                <v-card style="overflow: hidden">
+                  <v-row justify="center">
+                    <v-icon v-if="checkPedidoConfirmado()" size="200" color="green">mdi-check-bold</v-icon>
+                  </v-row>
+                  <v-row justify="center">
+                    <v-icon v-if="!checkPedidoConfirmado()" size="200" color="red">mdi-alert-circle-outline</v-icon>
+                  </v-row>
+                  <v-card-text>
+                    <div v-if="checkPedidoConfirmado()" class="text-center text-h2 pa-12">Pedido confirmado!</div>
+                    <div v-if="checkPedidoConfirmado()" class="text-center text-h5 pa-12">Seu pedido está com o restaurante e
+  já esta sendo preparado!</div>
+                    <div v-if="!checkPedidoConfirmado()" class="text-center text-h2 pa-12">Pedido Negado!</div>
+                  </v-card-text>
+                  <v-card-actions class="justify-end">
+                    <v-btn
+                      text
+                      data-cy="btn-ok-pedido-confirmado"
+                      @click="showDialog = false"
+                    >Ok</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </template>
+            </v-dialog>
+      </template>
+    </div>
+  </div>
 </template>
 
 <script>
+import { _enum } from '../utils/enum.js'
+const axios = require('axios')
 export default {
   name: 'Pedidos',
   data () {
     return {
-      // data -> Todos os pedidos dessa data
-      pedidos: [
-        {
-          dataPedido: '12/12/2021',
-          infoPedidos: [
-            {
-              id: '45487214',
-              descricao: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non dui a nisl consectetur tristique sed non orci. Cras ligula enim, facilisis quis lacus non, auctor interdum ante. Fusce justo tellus, elementum non erat a, pulvinar varius est. Ut nec risus mollis odio porttitor tristique. Cras egestas suscipit neque. Maecenas dapibus nibh sed luctus sodales. Cras lectus nibh, congue in sapien eget, porta molestie lectus. Sed auctor, justo in varius lacinia, orci enim tincidunt nulla, id bibendum neque lectus at nisl. Quisque consectetur, neque sed varius pretium, neque purus vehicula turpis, id elementum est turpis in lorem. Vestibulum sit amet nulla massa. Fusce mi dui, vestibulum viverra sagittis ut, pretium ut justo. Proin mattis sem vitae dapibus sagittis. Duis tempus diam sit amet leo blandit bibendum eu nec lectus.'
-            },
-            {
-              id: '5467613546',
-              descricao: 'Lorem ipsum dolor '
-            }
-          ]
-        },
-        {
-          dataPedido: '11/12/2021',
-          infoPedidos: [
-            {
-              id: '45487214',
-              descricao: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non dui a nisl consectetur tristique sed non orci. Cras ligula enim, facilisis quis lacus non, auctor interdum ante. Fusce justo tellus, elementum non erat a, pulvinar varius est. Ut nec risus mollis odio porttitor tristique. Cras egestas suscipit neque. Maecenas dapibus nibh sed luctus sodales. Cras lectus nibh, congue in sapien eget, porta molestie lectus. Sed auctor, justo in varius lacinia, orci enim tincidunt nulla, id bibendum neque lectus at nisl. Quisque consectetur, neque sed varius pretium, neque purus vehicula turpis, id elementum est turpis in lorem. Vestibulum sit amet nulla massa. Fusce mi dui, vestibulum viverra sagittis ut, pretium ut justo. Proin mattis sem vitae dapibus sagittis. Duis tempus diam sit amet leo blandit bibendum eu nec lectus.'
-            },
-            {
-              id: '5467613546',
-              descricao: 'Lorem ipsum dolor '
-            }
-          ]
-
-        }
-      ]
+      ultimoPedido: this.$store.state.ultimoPedido,
+      showDialog: false,
+      pedido: null,
+      pedidos: '',
+      statusColor: 'green'
     }
   },
   methods: {
     detalhePedido (id) {
       this.$router.push(`/detalhe/${id}`)
+    },
+
+    getStatusPedido (pedido) {
+      switch (pedido.status) {
+        case 0:
+          return 'Aguardando Pagamento'
+        case 1:
+          return 'Aguardando Confirmação'
+        case 2:
+          return 'Sendo Preparado'
+        case 3:
+          return 'Aguardando Entregador'
+        case 4:
+          return 'Sendo Entregue'
+        case 5:
+          return 'Aguardando Coleta'
+        case 6:
+          return 'Completo'
+        case 7:
+          return 'Cancelado pelo cliente'
+        case 8:
+          return 'Cancelado pelo restaurante'
+      }
+    },
+
+    checkNovoPedido () {
+      return this.pedidos.slice(-1)[0].id !== this.ultimoPedido.id
+    },
+
+    checkPedidoConfirmado () {
+      return this.pedidos.slice(-1)[0].status === _enum.SENDO_PREPARADO
+    },
+
+    async getPedidos () {
+      const userId = this.$store.state.user.id
+      await axios.get(`http://localhost:3000/usuario/${userId}/pedidos`)
+        .then(resp => {
+          this.pedidos = resp.data.data
+          console.log(this.pedidos)
+          if (this.pedidos.length > 0) {
+            this.$store.dispatch('assignPedidos', resp.data)
+            const pedido = this.pedidos.slice(-1)[0]
+            if (this.checkPedidoConfirmado() && this.checkNovoPedido()) {
+              this.showDialog = true
+              this.$store.dispatch('atualizaUltimoPedido', pedido.id)
+            }
+          }
+        })
+        .catch(e => { console.log(e) })
     }
   },
 
   computed: {
+    temPedido () {
+      return this.pedidos.length > 0
+    }
+  },
 
+  beforeMount () {
+    this.getPedidos()
   }
 }
 </script>
@@ -95,6 +164,15 @@ export default {
 
 #pedido {
   width: 100%;
+}
+
+p {
+  color: black;
+  font-size: 1rem;
+  margin-left: 30px;
+}
+#descricao{
+  margin-left: 50px
 }
 
 </style>>

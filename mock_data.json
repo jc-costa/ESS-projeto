@@ -1,0 +1,23 @@
+{
+    "usuarios": [
+        {
+            "id": 1,
+            "nome": "Breno Miranda",
+            "carrinho": {},
+            "pedidos": []
+        }
+    ],
+    "restaurantes": [
+        {
+            "id": 1,
+            "nome": "Raul",
+            "endereco": "Rua A",
+            "telefone": "123456789",
+            "horarioFuncionamento": "10:00 - 22:00",
+            "comandas": []
+        }
+    ],
+    "itens": [
+        
+    ]
+}

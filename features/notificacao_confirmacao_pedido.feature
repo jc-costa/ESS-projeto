@@ -23,6 +23,5 @@ Feature: Notificação da confirmação de um pedido
     Scenario: Item em falta
         Given Eu realizei o pedido do item "Pizza Grande" no restaurante "Pizza Hut"
         When O restaurante informa que o item "Pizza Grande" está em falta
-        # Não tenho certeza da forma correta de colocar esse detalhamento para esse tipo de notificação
         Then Uma notificação do tipo "Alert" aparecerá na tela com a mensagem "O item #item do pedido #n° está em falta"
         And Uma notificação do tipo "Confirm" aparecerá na tela com a mensagem "Deseja substituir o item #item do pedido #n°?"
