@@ -41,6 +41,29 @@
                             mdi-open-in-new
                           </v-icon>
                         </v-btn>
+                        <v-dialog v-model="deleteDialog" width="450">
+                          <template v-slot:activator="{on, attrs}">
+                            <v-btn class="ml-5" v-on="on" v-bind="attrs" icon color="red" @click="deleteDialog = true">
+                              <v-icon>
+                                mdi-delete
+                              </v-icon>
+                            </v-btn>
+                          </template>
+                          <v-card>
+                            <v-card-title>
+                              Tem certeza que deseja limpar o carrinho?
+                            </v-card-title>
+                            <v-card-actions>
+                              <v-btn plain @click="closeDialog()">
+                                cancelar
+                              </v-btn>
+                              <v-spacer></v-spacer>
+                              <v-btn plain color="red" @click="deleteAll()">
+                                excluir
+                              </v-btn>
+                            </v-card-actions>
+                          </v-card>
+                        </v-dialog>
                         <v-overlay :value="overlay">
                           <v-progress-circular
                             indeterminate
@@ -121,7 +144,8 @@ export default {
         message: null,
         color: null
       },
-      userId: this.$store.state.user.id
+      userId: this.$store.state.user.id,
+      deleteDialog: false
     }
   },
 
@@ -143,13 +167,16 @@ export default {
     async getCarrinho () {
       await axios.get(`http://localhost:3000/usuario/${this.userId}/carrinho`)
         .then(resp => {
-          this.carrinho = resp.data
+          if (resp.data.error) {
+            this.carrinho = null
+          } else {
+            this.carrinho = resp.data
+          }
           this.loading = false
         })
         .catch(e => {
           this.carrinho = null
           this.loading = false
-          console.log(e)
         })
     },
 
@@ -207,6 +234,20 @@ export default {
         .catch(e => {
           console.log(e)
         })
+    },
+    async deleteAll () {
+      await axios.delete(`http://localhost:3000/usuario/${this.userId}/carrinho`)
+        .then(resp => {
+          console.log('Carrinho limpo')
+          this.carrinho = resp.data
+        })
+        .catch(e => {
+          console.log(e)
+        })
+      this.closeDialog()
+    },
+    closeDialog () {
+      this.deleteDialog = false
     }
   },
 

@@ -89,11 +89,11 @@
           <v-col>
             <span class="mr-1" style="color: black; font-size: 1rem">Quantidade</span>
             <v-btn icon class="mr-1" @click="aumentaQuantidade()">
-              <v-icon>mdi-chevron-up</v-icon>
+              +
             </v-btn>
               {{this.editPedido.quantidade}}
             <v-btn icon class="ml-1" @click="diminuiQuantidade()">
-              <v-icon>mdi-chevron-down</v-icon>
+              -
             </v-btn>
           </v-col>
         </v-row>
