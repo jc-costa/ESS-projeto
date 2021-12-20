@@ -56,6 +56,26 @@ Além disso, o comando `npm test:commit` pode ser utilizado para testar apenas a
 
 ## Front-End
 
+Para o front-end foi utilizado a tecnologia do [Vue.js](https://vuejs.org/) conjuntamente com o [Vuetify](https://vuetifyjs.com/en/), que é uma biblioteca de UI que possui uma facilidade e liberdade na criação de we-bapps, [VueRouter](https://router.vuejs.org/), a biblioteca oficial do Vue.js para navegação entre diferentes telas, e o [Vuex](https://vuex.vuejs.org/), que é uma biblioteca de gerenciamento de estado.
+
+Finalmente, para os testes foi utilizado o framework [Cypress](https://www.cypress.io/), que é uma ferramenta poderosa que possibilita a escrita de testes rápidos de maneira fácil e que são confiáveis.
+### Funcionamento
+
+Para acessar os recuros disponíveis no aplicativo, é necessário primeiro fazer um login simples, onde é pedido o nome de usuário. A partir disso podemos acessar a tela de pedidos e a tela de carrinho através dos botões presentes na navbar.
+
+Para executar o aplicativo, precisamos primeiro instalar suas depedências através do `npm install`.
+
+Após instalados as depedências, podemos executar o aplicativo através do comando `npm run serve` que iniciará o aplicativo no endereço padrão [localhost:8080](localhost:8080) (caso a porta 8080 esteja ocupada, esta será incrementada em 1, ou seja será localhost:8081).
+
 ### Testes
 
 Ao rodar os testes end-to-end, o front-end faz modificacões no servidor, de forma que este precisa ser reiniciado antes de uma segunda testagem.
+
+Podemos executar os testes de duas maneiras:
+
+* `npx cypress open`
+* `npm run tests:e2e`
+
+O primeiro comando `npx cypress open` irá executar o Cypress no modo GUI, caso queira executar todos os testes sem visualizar o que está acontecendo podemos executar o comando `npx cypress run` que executará todos os testes através do CLI.
+
+O segundo comando `npm run test:e2e` irá iniciar o aplicativo em modo de produção e quando este estiver em execução, ira executar o Cypress em modo GUI. Caso queira executar todos os testes sem a GUI podemos passar a opção `--headless` ao comando.
