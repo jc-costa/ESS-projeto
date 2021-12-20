@@ -68,6 +68,7 @@ var usuarios = [
                         id: 2, 
                         itens: [itens[1]], 
                         valorTotal: 50, 
+                        data: new Date(), 
                         status: StatusPedido.COMPLETO, 
                         restaurante: restaurantes[0]
                     }
@@ -137,6 +138,22 @@ app.delete('/usuario/:id/carrinho/:idItem', function (req, res) {
         const idItem: number = +req.params.idItem;
         usuario.pegarCarrinho().removerItem(idItem);
 
+        return res.status(200).json({data: usuario.pegarCarrinho().pegarInformacao()});
+    } else {
+        return res.status(404).json({error: "Usuário não encontrado"});
+    }
+});
+
+
+/**
+ * @api {delete} /usuario/:id/carrinho Limpa o carrinho, retornando o carrinho atualizado.
+ */
+ app.delete('/usuario/:id/carrinho', function (req, res) {
+    const id: number = +req.params.id;
+    const usuario = usuarios.find(u => u.id == id);
+
+    if (usuario) {
+        usuario.pegarCarrinho().limpar();
         return res.status(200).json({data: usuario.pegarCarrinho().pegarInformacao()});
     } else {
         return res.status(404).json({error: "Usuário não encontrado"});
