@@ -10,6 +10,6 @@ Feature: Histórico de Pedidos
 
     Scenario: Exibir o histórico de um pedido
         Given Estou na página de Pedidos
-        When Eu clico no pedido "Pizza Grande"
-        Then As informações de "N° Pedido", "Preço" e "Data do pedido" são exibidas
+        When Eu clico no botão "Detalhes de Pedidos"
+        Then As informações de "Data", "Nome do Restaurante", "Itens da lista de pedidos" e "Valor total" são exibidas
         
