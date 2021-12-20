@@ -144,6 +144,22 @@ app.delete('/usuario/:id/carrinho/:idItem', function (req, res) {
     }
 });
 
+
+/**
+ * @api {delete} /usuario/:id/carrinho Limpa o carrinho, retornando o carrinho atualizado.
+ */
+ app.delete('/usuario/:id/carrinho', function (req, res) {
+    const id: number = +req.params.id;
+    const usuario = usuarios.find(u => u.id == id);
+
+    if (usuario) {
+        usuario.pegarCarrinho().limpar();
+        return res.status(200).json({data: usuario.pegarCarrinho().pegarInformacao()});
+    } else {
+        return res.status(404).json({error: "Usuário não encontrado"});
+    }
+});
+
 /**
  * @api {put} /usuario/:id/carrinho Atualiza o item com a id informada do carrinho do usuário, retornando o carrinho atualizado
  */
