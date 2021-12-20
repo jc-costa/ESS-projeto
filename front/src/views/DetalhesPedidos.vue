@@ -7,7 +7,7 @@
             <v-btn data-cy="btn-voltarPedidos" icon @click="goBack()">
               <v-icon>mdi-chevron-left</v-icon>
             </v-btn>
-            Pedido #{{this.$route.params.id}}
+            Pedido #{{this.$route.params.id + ' ' + getStatusPedido(this.status)}}
           </v-card-title>
           <v-card-text>
             <v-col class="ml-10">
@@ -27,6 +27,17 @@
               <v-row>
                 <p class="mt-8">Valor Total R$: {{this.valor}}</p>
               </v-row>
+              <v-row>
+                <v-btn
+                  v-if="podeCancelar()"
+                  depressed
+                  large
+                  color="error"
+                  @click="cancelaPedido()"
+                >
+                  Cancelar
+                </v-btn>
+              </v-row>
             </v-col>
           </v-card-text>
         </v-card>
@@ -36,16 +47,20 @@
 </template>
 
 <script>
+import { _enum } from '../utils/enum.js'
+const axios = require('axios')
 export default {
   name: 'DetalhePedido',
   data () {
     return {
+      userId: this.$store.state.user.id,
       pedidos: this.$store.state.pedidos,
       id: this.$route.params.id,
       itens: '',
       date: ' ',
       nomeRestaurante: ' ',
-      valor: ' '
+      valor: ' ',
+      status: ' '
     }
   },
   computed: {
@@ -54,6 +69,50 @@ export default {
     goBack () {
       this.$router.go(-1)
     },
+
+    podeCancelar () {
+      return this.status === _enum.SENDO_PREPARADO
+    },
+
+    getStatusPedido (status) {
+      switch (status) {
+        case 0:
+          return 'Aguardando Pagamento'
+        case 1:
+          return 'Aguardando Confirmação'
+        case 2:
+          return 'Sendo Preparado'
+        case 3:
+          return 'Aguardando Entregador'
+        case 4:
+          return 'Sendo Entregue'
+        case 5:
+          return 'Aguardando Coleta'
+        case 6:
+          return 'Completo'
+        case 7:
+          return 'Cancelado pelo cliente'
+        case 8:
+          return 'Cancelado pelo restaurante'
+      }
+    },
+
+    async cancelaPedido () {
+      await axios.put(`http://localhost:3000/usuario/${this.userId}/pedidos/${this.$route.params.id}/cancelar`, {
+        id: this.userId,
+        idPedido: this.$route.params.id
+      })
+        .then(resp => {
+          console.log('cancela pedido')
+          console.log(resp.data)
+          this.carrinho = resp.data
+          this.$router.push('/pedidos')
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    },
+
     getInfoPedidos () {
       console.log(this.pedidos.data)
       this.pedidos.data.forEach(pedido => {
@@ -62,6 +121,7 @@ export default {
           this.nomeRestaurante = pedido.restaurante.nome
           this.valor = pedido.valorTotal
           this.itens = pedido.itens
+          this.status = pedido.status
         }
       })
     }

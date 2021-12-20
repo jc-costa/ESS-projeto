@@ -24,6 +24,17 @@ export class Restaurante {
         this.horárioFuncionamento = horárioFuncionamento;
     }
 
+    pegarInformacao() {
+        return {
+            "id": this.id,
+            "nome": this.nome,
+            "endereco": this.endereco,
+            "telefone": this.telefone,
+            "horárioFuncionamento": this.horárioFuncionamento,
+            "tempoMedioDePreparo": this.tempoMedioDePreparo,
+        }
+    }
+
     gerarComanda(pedido: Pedido) {
         const novaComanda = new Comanda(<Comanda> {
             id: this.comandas.length + 1,
