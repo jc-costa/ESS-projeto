@@ -27,10 +27,7 @@ export class Carrinho {
 
     pegarInformacao() {
         return {
-            restaurante: {
-                id: this.restaurante.id,
-                nome: this.restaurante.nome
-            },
+            restaurante: this.restaurante ? this.restaurante.pegarInformacao() : undefined,
             itens: this.itens.map(item => item.pegarInformacao()),
             precoTotal: this.calcularPrecoTotal()
         }
