@@ -97,7 +97,7 @@ app.get('/usuario/:id/carrinho', function (req, res) {
         if(usuario.pegarCarrinho().pegarItens().length > 0){
             return res.status(200).json({data: usuario.pegarCarrinho().pegarInformacao()});
         } else {
-            return res.status(404).json({error: "Carrinho não encontrado"});
+            return res.status(200).json({error: "Carrinho não encontrado"});
         }
     } else {
         return res.status(404).json({error: "Usuário não encontrado"});

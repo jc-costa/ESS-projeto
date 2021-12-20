@@ -33,6 +33,7 @@
                 <div v-for="(item, index) in pedido.itens" :key="index">
                   <p id="descricao">- {{item.descricao}}</p>
                 </div>
+                <div id="status" class="text-h5 pa-12"> Status: {{getStatusPedido(pedido)}}</div>
               </v-card-text>
             </v-card>
         </v-col>
@@ -84,7 +85,8 @@ export default {
       ultimoPedido: this.$store.state.ultimoPedido,
       showDialog: false,
       pedido: null,
-      pedidos: ''
+      pedidos: '',
+      statusColor: 'green'
     }
   },
   methods: {
